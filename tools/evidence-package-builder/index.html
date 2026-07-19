@@ -132,15 +132,85 @@
     cursor: pointer;
   }
   .epb-gate-form button:disabled { background: var(--border); color: var(--faint); cursor: default; }
-  .epb-summary-output {
-    display: none;
+  .epb-mode-toggle { margin-bottom: 16px; }
+  .epb-mode-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: var(--small);
+    color: var(--charcoal);
+    padding: 8px 0;
+    cursor: pointer;
+  }
+  .epb-mode-option input { margin-top: 3px; }
+
+  .epb-summary-doc {
     border: var(--hairline);
     background: var(--surface);
-    padding: 24px;
+    padding: 40px;
     margin-top: 24px;
-    white-space: pre-wrap;
+  }
+  .epb-doc-header {
+    border-bottom: 2px solid var(--charcoal);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+  .epb-doc-title { font-size: var(--h1); font-weight: 700; margin-bottom: 4px; }
+  .epb-doc-meta { font-size: var(--small); color: var(--mid); }
+  .epb-doc-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mid);
+    border-bottom: 1px solid var(--charcoal);
+    padding-bottom: 6px;
+    margin: 28px 0 12px;
+  }
+  .epb-doc-section-title:first-of-type { margin-top: 0; }
+  .epb-doc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: var(--hairline);
+  }
+  .epb-doc-item:last-child { border-bottom: none; }
+  .epb-doc-item-name { font-size: var(--small); font-weight: 700; }
+  .epb-doc-item-detail { font-size: 12px; color: var(--mid); margin-top: 2px; }
+  .epb-doc-item-next { font-size: 12px; color: var(--accent-dim); margin-top: 4px; }
+  .epb-doc-item-next a { color: var(--accent-dim); }
+  .epb-doc-badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .epb-doc-badge.current { background: #e6f2e8; color: #2e7d32; }
+  .epb-doc-badge.needs-update { background: #fbeee0; color: #b45309; }
+  .epb-doc-badge.not-started { background: var(--bg); color: var(--faint); }
+  .epb-doc-lead {
     font-size: var(--small);
-    line-height: 1.8;
+    color: var(--charcoal);
+    background: var(--accent-pale);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    margin-bottom: 24px;
+  }
+
+  @media print {
+    .topbar, .sidebar, .breadcrumb, .page-label, h1, .lead,
+    .epb-disclosure, .epb-summary-bar, #epb-categories, .epb-gate,
+    .epb-summary-actions, footer {
+      display: none !important;
+    }
+    .main { margin-left: 0 !important; padding: 0 !important; }
+    .epb-summary-doc { border: none !important; padding: 0 !important; }
+    body { background: white !important; }
   }
   .epb-summary-actions { margin-top: 16px; display: flex; gap: 8px; }
   .epb-summary-actions button {
@@ -252,11 +322,27 @@
 
       <div class="epb-gate" id="epb-gate">
         <span class="page-label" style="margin-bottom:6px;">Generate Package Summary</span>
-        <p style="font-size: var(--small); color: var(--charcoal); margin-bottom: 0;">
-          Enter your email to unlock a formatted summary you can hand to a
-          broker or underwriter. We'll also send you a reminder to update
-          entries that are approaching a year old.
+        <p style="font-size: var(--small); color: var(--charcoal); margin-bottom: 12px;">
+          Enter your email to unlock a formatted summary. Choose the version
+          that fits how you're using it.
         </p>
+
+        <div class="epb-field-row" style="grid-template-columns: 160px 1fr; margin-bottom: 10px;">
+          <label class="epb-field-label">Company name (optional)</label>
+          <input type="text" id="epb-company" placeholder="Acme Corp">
+        </div>
+
+        <div class="epb-mode-toggle" role="radiogroup" aria-label="Summary type">
+          <label class="epb-mode-option">
+            <input type="radio" name="epb-mode" value="internal" checked>
+            <span><strong>Internal tracking</strong> — flags gaps clearly, with next steps, for your own team</span>
+          </label>
+          <label class="epb-mode-option">
+            <input type="radio" name="epb-mode" value="broker">
+            <span><strong>Broker-facing</strong> — clean summary of current state, no gaps highlighted</span>
+          </label>
+        </div>
+
         <form class="epb-gate-form" id="epb-gate-form">
           <input type="email" id="epb-email" placeholder="you@company.com" required>
           <button type="submit" id="epb-gate-submit">Generate Summary</button>
@@ -264,7 +350,7 @@
         <div id="epb-gate-msg" style="font-size: 11px; margin-top: 8px;"></div>
       </div>
 
-      <div class="epb-summary-output" id="epb-summary-output"></div>
+      <div class="epb-summary-doc" id="epb-summary-doc" style="display:none;"></div>
       <div class="epb-summary-actions" id="epb-summary-actions" style="display:none;">
         <button id="epb-copy">Copy to Clipboard</button>
         <button id="epb-download">Download as Text File</button>
@@ -384,6 +470,18 @@
       ]
     }
   ];
+
+  const NEXT_STEPS = {
+    mfa: 'Confirm MFA enforcement covers all privileged accounts, not just general users.',
+    edr: 'Pull a current coverage report showing agent deployment percentage.',
+    backups: 'Run and document an actual restoration test, not just confirm backups are scheduled.',
+    irplan: 'Review the plan for currency and schedule a tabletop exercise if none is on record.',
+    assets: 'Update the asset inventory to reflect current hardware, software, and data repositories.',
+    vendor: 'Review third-party vendor access and document the vendor risk review.',
+    training: 'Schedule security awareness training and a phishing simulation if overdue.',
+    pentest: 'Schedule a penetration test, or confirm prior findings were remediated.',
+    compliance: 'Confirm certification renewal dates and update this record.'
+  };
 
   let state = {};
   try {
@@ -599,42 +697,123 @@
     });
   }
 
-  function buildSummaryText() {
-    let lines = ['EVIDENCE PACKAGE SUMMARY', 'Generated ' + new Date().toISOString().slice(0, 10), ''];
-    CATEGORIES.forEach(function (cat) {
-      const entry = getEntry(cat.id);
-      const status = computeStatus(cat);
-      lines.push((cat.core ? '' : '[OPTIONAL] ') + cat.label.toUpperCase() + ' — ' + statusLabel(status));
-
-      if (cat.repeatable) {
-        const rows = (entry.rows || []).filter(r => r.cert || r.renewed);
-        if (rows.length === 0) {
-          lines.push('  No certifications listed');
-        } else {
-          rows.forEach(function (row) {
-            lines.push('  ' + (row.cert || '(unnamed)') + ': last renewed ' + (row.renewed || 'unknown'));
-          });
+  function categoryDetailLine(cat, entry) {
+    if (cat.repeatable) {
+      const rows = (entry.rows || []).filter(r => r.cert || r.renewed);
+      if (rows.length === 0) return 'No certifications listed';
+      return rows.map(r => (r.cert || '(unnamed)') + ' — renewed ' + (r.renewed || 'unknown')).join('; ');
+    }
+    const parts = [];
+    cat.fields.forEach(function (f) {
+      if (f.key === 'notes') return;
+      if (entry[f.key]) {
+        let val = entry[f.key];
+        if (f.type === 'select') {
+          const opt = f.options.find(o => o[0] === val);
+          if (opt) val = opt[1];
         }
+        parts.push(f.label + ': ' + val);
       }
+    });
+    return parts.length ? parts.join(' · ') : 'No entry yet';
+  }
 
-      cat.fields.forEach(function (f) {
-        if (entry[f.key]) {
-          let displayVal = entry[f.key];
-          if (f.type === 'select') {
-            const opt = f.options.find(o => o[0] === displayVal);
-            if (opt) displayVal = opt[1];
-          }
-          lines.push('  ' + f.label + ': ' + displayVal);
-        }
+  function buildSummaryText(mode, company) {
+    const needsAttention = CATEGORIES.filter(c => computeStatus(c) !== 'current');
+    const current = CATEGORIES.filter(c => computeStatus(c) === 'current');
+    let lines = ['EVIDENCE PACKAGE SUMMARY'];
+    if (company) lines.push('Prepared for: ' + company);
+    lines.push('Generated ' + new Date().toISOString().slice(0, 10));
+    lines.push('');
+
+    if (mode === 'internal' && needsAttention.length) {
+      lines.push('NEEDS ATTENTION (' + needsAttention.length + ')');
+      needsAttention.forEach(function (cat) {
+        const entry = getEntry(cat.id);
+        lines.push('- ' + cat.label + (cat.core ? '' : ' [optional]') + ': ' + statusLabel(computeStatus(cat)));
+        lines.push('  ' + categoryDetailLine(cat, entry));
+        if (NEXT_STEPS[cat.id]) lines.push('  Next step: ' + NEXT_STEPS[cat.id]);
       });
       lines.push('');
+    }
+
+    lines.push('CURRENT (' + current.length + ')');
+    current.forEach(function (cat) {
+      const entry = getEntry(cat.id);
+      lines.push('- ' + cat.label + (cat.core ? '' : ' [optional]') + ': ' + categoryDetailLine(cat, entry));
     });
+
+    if (mode === 'broker' && needsAttention.length) {
+      lines.push('');
+      lines.push('IN PROGRESS (' + needsAttention.length + ')');
+      needsAttention.forEach(function (cat) {
+        lines.push('- ' + cat.label + (cat.core ? '' : ' [optional]'));
+      });
+    }
+
     return lines.join('\n');
+  }
+
+  function renderSummaryDoc(mode, company) {
+    const needsAttention = CATEGORIES.filter(c => computeStatus(c) !== 'current');
+    const current = CATEGORIES.filter(c => computeStatus(c) === 'current');
+    const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    let html = '<div class="epb-doc-header">';
+    html += '<div class="epb-doc-title">Evidence Package Summary</div>';
+    html += '<div class="epb-doc-meta">' + (company ? company + ' &middot; ' : '') + dateStr + '</div>';
+    html += '</div>';
+
+    if (mode === 'internal') {
+      html += '<div class="epb-doc-lead">' +
+        (needsAttention.length
+          ? needsAttention.length + ' of ' + CATEGORIES.length + ' categories need attention before your next renewal.'
+          : 'All tracked categories are current.') +
+        '</div>';
+    }
+
+    function renderItem(cat, showNextStep) {
+      const entry = getEntry(cat.id);
+      const status = computeStatus(cat);
+      let html = '<div class="epb-doc-item"><div>';
+      html += '<div class="epb-doc-item-name">' + cat.label + (cat.core ? '' : ' <span style="color:var(--faint);font-weight:400;">(optional)</span>') + '</div>';
+      html += '<div class="epb-doc-item-detail">' + categoryDetailLine(cat, entry) + '</div>';
+      if (showNextStep && NEXT_STEPS[cat.id]) {
+        html += '<div class="epb-doc-item-next">Next: ' + NEXT_STEPS[cat.id] + ' <a href="' + cat.guideAnchor + '">Guide &rarr;</a></div>';
+      }
+      html += '</div><div class="epb-doc-badge ' + status + '">' + statusLabel(status) + '</div></div>';
+      return html;
+    }
+
+    if (mode === 'internal' && needsAttention.length) {
+      html += '<div class="epb-doc-section-title">Needs Attention</div>';
+      needsAttention.forEach(function (cat) { html += renderItem(cat, true); });
+    }
+
+    html += '<div class="epb-doc-section-title">Current</div>';
+    if (current.length) {
+      current.forEach(function (cat) { html += renderItem(cat, false); });
+    } else {
+      html += '<div style="font-size:var(--small); color:var(--faint); padding:12px 0;">No categories current yet.</div>';
+    }
+
+    if (mode === 'broker' && needsAttention.length) {
+      html += '<div class="epb-doc-section-title">In Progress</div>';
+      needsAttention.forEach(function (cat) {
+        html += '<div class="epb-doc-item"><div><div class="epb-doc-item-name">' + cat.label +
+          (cat.core ? '' : ' <span style="color:var(--faint);font-weight:400;">(optional)</span>') +
+          '</div></div></div>';
+      });
+    }
+
+    return html;
   }
 
   document.getElementById('epb-gate-form').addEventListener('submit', function (e) {
     e.preventDefault();
     const email = document.getElementById('epb-email').value.trim();
+    const company = document.getElementById('epb-company').value.trim();
+    const mode = document.querySelector('input[name="epb-mode"]:checked').value;
     const btn = document.getElementById('epb-gate-submit');
     const msg = document.getElementById('epb-gate-msg');
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -656,9 +835,11 @@
         if (data.message === 'Subscribed') {
           msg.textContent = 'Summary generated below.';
           msg.style.color = 'var(--accent)';
-          const output = document.getElementById('epb-summary-output');
-          output.style.display = 'block';
-          output.textContent = buildSummaryText();
+          const doc = document.getElementById('epb-summary-doc');
+          doc.style.display = 'block';
+          doc.innerHTML = renderSummaryDoc(mode, company);
+          doc.dataset.mode = mode;
+          doc.dataset.company = company;
           document.getElementById('epb-summary-actions').style.display = 'flex';
         } else {
           msg.textContent = 'Something went wrong: ' + (data.detail || data.message || 'unknown error') + '. Try again.';
@@ -674,13 +855,15 @@
   });
 
   document.getElementById('epb-copy').addEventListener('click', function () {
-    navigator.clipboard.writeText(buildSummaryText());
+    const doc = document.getElementById('epb-summary-doc');
+    navigator.clipboard.writeText(buildSummaryText(doc.dataset.mode, doc.dataset.company));
     this.textContent = 'Copied';
     setTimeout(() => { this.textContent = 'Copy to Clipboard'; }, 1500);
   });
 
   document.getElementById('epb-download').addEventListener('click', function () {
-    const blob = new Blob([buildSummaryText()], { type: 'text/plain' });
+    const doc = document.getElementById('epb-summary-doc');
+    const blob = new Blob([buildSummaryText(doc.dataset.mode, doc.dataset.company)], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
