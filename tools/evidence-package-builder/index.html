@@ -332,6 +332,11 @@
           <input type="text" id="epb-company" placeholder="Acme Corp">
         </div>
 
+        <div class="epb-field-row" style="grid-template-columns: 160px 1fr; margin-bottom: 10px;">
+          <label class="epb-field-label">Next renewal date (optional)</label>
+          <input type="date" id="epb-renewal">
+        </div>
+
         <div class="epb-mode-toggle" role="radiogroup" aria-label="Summary type">
           <label class="epb-mode-option">
             <input type="radio" name="epb-mode" value="internal" checked>
@@ -718,12 +723,14 @@
     return parts.length ? parts.join(' · ') : 'No entry yet';
   }
 
-  function buildSummaryText(mode, company) {
+  function buildSummaryText(mode, company, renewal) {
     const needsAttention = CATEGORIES.filter(c => computeStatus(c) !== 'current');
     const current = CATEGORIES.filter(c => computeStatus(c) === 'current');
+    const countdown = renewalCountdown(renewal);
     let lines = ['EVIDENCE PACKAGE SUMMARY'];
     if (company) lines.push('Prepared for: ' + company);
     lines.push('Generated ' + new Date().toISOString().slice(0, 10));
+    if (countdown) lines.push(countdown);
     lines.push('');
 
     if (mode === 'internal' && needsAttention.length) {
@@ -751,17 +758,39 @@
       });
     }
 
+    if (mode === 'internal') {
+      lines.push('');
+      lines.push('Reviewed by: _________________________   Date: _______________');
+    }
+
+    lines.push('');
+    lines.push('Generated via Cyber Insurance Central\'s Evidence Package Builder');
+    lines.push('cyberinsurancecentral.com/tools/evidence-package-builder');
+
     return lines.join('\n');
   }
 
-  function renderSummaryDoc(mode, company) {
+  function renewalCountdown(renewalDate) {
+    if (!renewalDate) return null;
+    const target = new Date(renewalDate);
+    if (isNaN(target)) return null;
+    const now = new Date();
+    const days = Math.ceil((target - now) / (1000 * 60 * 60 * 24));
+    if (days < 0) return 'Renewal date has passed';
+    if (days === 0) return 'Renewal is today';
+    return days + ' day' + (days === 1 ? '' : 's') + ' until renewal';
+  }
+
+  function renderSummaryDoc(mode, company, renewal) {
     const needsAttention = CATEGORIES.filter(c => computeStatus(c) !== 'current');
     const current = CATEGORIES.filter(c => computeStatus(c) === 'current');
     const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const countdown = renewalCountdown(renewal);
 
     let html = '<div class="epb-doc-header">';
     html += '<div class="epb-doc-title">Evidence Package Summary</div>';
-    html += '<div class="epb-doc-meta">' + (company ? company + ' &middot; ' : '') + dateStr + '</div>';
+    html += '<div class="epb-doc-meta">' + (company ? company + ' &middot; ' : '') + 'Generated ' + dateStr +
+      (countdown ? ' &middot; ' + countdown : '') + '</div>';
     html += '</div>';
 
     if (mode === 'internal') {
@@ -806,6 +835,17 @@
       });
     }
 
+    if (mode === 'internal') {
+      html += '<div style="margin-top:32px; padding-top:20px; border-top:var(--hairline); font-size:var(--small);">';
+      html += '<div style="margin-bottom:16px;">Reviewed by: _________________________ &nbsp;&nbsp;&nbsp; Date: _______________</div>';
+      html += '</div>';
+    }
+
+    html += '<div style="margin-top:24px; padding-top:12px; border-top:var(--hairline); font-size:11px; color:var(--faint);">';
+    html += 'Generated via Cyber Insurance Central\'s Evidence Package Builder &mdash; ';
+    html += '<a href="https://cyberinsurancecentral.com/tools/evidence-package-builder/" style="color:var(--faint);">cyberinsurancecentral.com/tools/evidence-package-builder</a>';
+    html += '</div>';
+
     return html;
   }
 
@@ -813,6 +853,7 @@
     e.preventDefault();
     const email = document.getElementById('epb-email').value.trim();
     const company = document.getElementById('epb-company').value.trim();
+    const renewal = document.getElementById('epb-renewal').value;
     const mode = document.querySelector('input[name="epb-mode"]:checked').value;
     const btn = document.getElementById('epb-gate-submit');
     const msg = document.getElementById('epb-gate-msg');
@@ -837,7 +878,8 @@
           msg.style.color = 'var(--accent)';
           const doc = document.getElementById('epb-summary-doc');
           doc.style.display = 'block';
-          doc.innerHTML = renderSummaryDoc(mode, company);
+          doc.innerHTML = renderSummaryDoc(mode, company, renewal);
+          doc.dataset.renewal = renewal;
           doc.dataset.mode = mode;
           doc.dataset.company = company;
           document.getElementById('epb-summary-actions').style.display = 'flex';
@@ -856,14 +898,14 @@
 
   document.getElementById('epb-copy').addEventListener('click', function () {
     const doc = document.getElementById('epb-summary-doc');
-    navigator.clipboard.writeText(buildSummaryText(doc.dataset.mode, doc.dataset.company));
+    navigator.clipboard.writeText(buildSummaryText(doc.dataset.mode, doc.dataset.company, doc.dataset.renewal));
     this.textContent = 'Copied';
     setTimeout(() => { this.textContent = 'Copy to Clipboard'; }, 1500);
   });
 
   document.getElementById('epb-download').addEventListener('click', function () {
     const doc = document.getElementById('epb-summary-doc');
-    const blob = new Blob([buildSummaryText(doc.dataset.mode, doc.dataset.company)], { type: 'text/plain' });
+    const blob = new Blob([buildSummaryText(doc.dataset.mode, doc.dataset.company, doc.dataset.renewal)], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
