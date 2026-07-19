@@ -19,12 +19,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>:root{--accent:#8A6A1E;--accent-dim:#6E5518;--accent-pale:#F7F1E3}</style>
 <link rel="stylesheet" href="/styles.css">
-<script src="/config.js" defer></script>
+<script src="/config.js"></script>
 </head>
 <body>
+<div class="topbar">
+  <a href="/" class="topbar-brand">Cyber Insurance <span>Central</span></a>
+  <div class="topbar-divider"></div>
+  <div class="topbar-tagline">Carrier requirements, coverage comparisons, and underwriting insight for cyber insurance buyers.</div>
+</div>
 <div class="layout">
+  <div class="sidebar" id="sidebar-nav"></div>
   <div class="main">
     <div class="content">
       <div class="breadcrumb">
@@ -140,6 +145,15 @@
           <a href="/guides/evidence-collection-and-packaging/">Evidence
           Collection and Packaging</a>
         </p>
+      </div>
+
+      <div class="newsletter-block">
+        <span class="page-label">Stay Informed</span>
+        <p>New guides publish weekly. Get notified when the next one drops.</p>
+        <form class="newsletter-form">
+          <input type="email" placeholder="you@company.com" required>
+          <button type="button">Subscribe</button>
+        </form>
       </div>
     </div>
   </div>
