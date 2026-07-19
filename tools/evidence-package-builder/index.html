@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evidence Package Builder — Track Your Cyber Insurance Evidence | Cyber Insurance Central</title>
+<meta name="description" content="Track evidence status across MFA, EDR, backups, IR planning, and more. Free tool to build a renewal-ready evidence package, updated year-round.">
+<link rel="canonical" href="https://cyberinsurancecentral.com/tools/evidence-package-builder/">
+<meta property="og:title" content="Evidence Package Builder — Cyber Insurance Central">
+<meta property="og:description" content="Track evidence status across MFA, EDR, backups, IR planning, and more.">
+<meta property="og:url" content="https://cyberinsurancecentral.com/tools/evidence-package-builder/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://cyberinsurancecentral.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cyberinsurancecentral.com/og-image.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>:root{--accent:#8A6A1E;--accent-dim:#6E5518;--accent-pale:#F7F1E3}</style>
+<link rel="stylesheet" href="/styles.css">
+<script src="/config.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  .epb-disclosure {
+    font-size: var(--small);
+    color: var(--mid);
+    border: var(--hairline);
+    background: var(--surface);
+    padding: 12px 16px;
+    margin-bottom: 32px;
+  }
+  .epb-summary-bar {
+    border: var(--hairline);
+    background: var(--surface);
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .epb-summary-count { font-size: var(--h2); font-weight: 700; }
+  .epb-category {
+    border: var(--hairline);
+    margin-bottom: 1px;
+    background: var(--surface);
+    padding: 20px 24px;
+  }
+  .epb-category-list { border-bottom: none; margin-bottom: 32px; }
+  .epb-category-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .epb-category-title { font-size: var(--h3); font-weight: 700; }
+  .epb-category-optional {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-left: 8px;
+  }
+  .epb-status {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .epb-status.current { border-color: #2e7d32; color: #2e7d32; }
+  .epb-status.needs-update { border-color: #b45309; color: #b45309; }
+  .epb-status.not-started { border-color: var(--border); color: var(--faint); }
+  .epb-field-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .epb-field-label { font-size: var(--small); color: var(--mid); }
+  .epb-field-row input, .epb-field-row select {
+    font-family: 'Space Mono', monospace;
+    font-size: var(--small);
+    padding: 6px 10px;
+    border: var(--hairline);
+    background: var(--bg);
+    color: var(--charcoal);
+    width: 100%;
+  }
+  .epb-field-row input:focus, .epb-field-row select:focus { border-color: var(--accent); outline: none; }
+  .epb-override {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--faint);
+    margin-top: 6px;
+  }
+  .epb-guide-link { font-size: 11px; margin-top: 8px; }
+  .epb-gate {
+    border: 1px solid var(--accent);
+    background: var(--accent-pale);
+    padding: 24px;
+    margin-top: 32px;
+  }
+  .epb-gate-form { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .epb-gate-form input {
+    flex: 1;
+    min-width: 220px;
+    font-family: 'Space Mono', monospace;
+    font-size: var(--small);
+    padding: 8px 12px;
+    border: var(--hairline);
+    background: var(--surface);
+  }
+  .epb-gate-form button {
+    font-family: 'Space Mono', monospace;
+    font-size: var(--small);
+    font-weight: 700;
+    padding: 8px 16px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  .epb-gate-form button:disabled { background: var(--border); color: var(--faint); cursor: default; }
+  .epb-summary-output {
+    display: none;
+    border: var(--hairline);
+    background: var(--surface);
+    padding: 24px;
+    margin-top: 24px;
+    white-space: pre-wrap;
+    font-size: var(--small);
+    line-height: 1.8;
+  }
+  .epb-summary-actions { margin-top: 16px; display: flex; gap: 8px; }
+  .epb-summary-actions button {
+    font-family: 'Space Mono', monospace;
+    font-size: var(--small);
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+  }
+  .epb-summary-actions button:hover { border-color: var(--accent); color: var(--accent); }
+  .epb-repeat-header {
+    display: grid;
+    grid-template-columns: 1fr 160px 32px;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 6px;
+  }
+  .epb-repeat-row {
+    display: grid;
+    grid-template-columns: 1fr 160px 32px;
+    gap: 8px;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+  .epb-repeat-row input {
+    font-family: 'Space Mono', monospace;
+    font-size: var(--small);
+    padding: 6px 10px;
+    border: var(--hairline);
+    background: var(--bg);
+    color: var(--charcoal);
+    width: 100%;
+  }
+  .epb-repeat-remove {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--faint);
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 6px;
+  }
+  .epb-repeat-remove:hover { border-color: #b45309; color: #b45309; }
+  .epb-repeat-add {
+    font-family: 'Space Mono', monospace;
+    font-size: var(--small);
+    padding: 6px 14px;
+    border: 1px dashed var(--border);
+    background: none;
+    color: var(--mid);
+    cursor: pointer;
+    margin-bottom: 12px;
+  }
+  .epb-repeat-add:hover { border-color: var(--accent); color: var(--accent); }
+  @media (max-width: 600px) {
+    .epb-field-row { grid-template-columns: 1fr; }
+    .epb-repeat-header, .epb-repeat-row { grid-template-columns: 1fr 120px 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="/" class="topbar-brand">Cyber Insurance <span>Central</span></a>
+  <div class="topbar-divider"></div>
+  <div class="topbar-tagline">Carrier requirements, coverage comparisons, and underwriting insight for cyber insurance buyers.</div>
+</div>
+<div class="layout">
+  <div class="sidebar" id="sidebar-nav"></div>
+  <div class="main">
+    <div class="content">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="/tools/">Tools</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>Evidence Package Builder</span>
+      </div>
+
+      <span class="page-label">Tool</span>
+      <h1>Evidence Package Builder</h1>
+      <p class="lead">
+        Track evidence status across the categories carriers actually ask
+        about. No score, just a plain-language read on what's current and
+        what needs attention before renewal.
+      </p>
+
+      <div class="epb-disclosure">
+        Entries save automatically in this browser only, not to an account
+        or synced across devices. Clear your browser data and entries are
+        lost. This tool doesn't verify anything itself; it's a place to
+        track what you've already confirmed.
+      </div>
+
+      <div class="epb-summary-bar">
+        <div>
+          <span class="epb-summary-count" id="epb-count">0 of 7 current</span>
+        </div>
+        <div style="font-size: var(--small); color: var(--mid);">
+          Core categories shown first. Optional categories below.
+        </div>
+      </div>
+
+      <div id="epb-categories" class="epb-category-list"></div>
+
+      <div class="epb-gate" id="epb-gate">
+        <span class="page-label" style="margin-bottom:6px;">Generate Package Summary</span>
+        <p style="font-size: var(--small); color: var(--charcoal); margin-bottom: 0;">
+          Enter your email to unlock a formatted summary you can hand to a
+          broker or underwriter. We'll also send you a reminder to update
+          entries that are approaching a year old.
+        </p>
+        <form class="epb-gate-form" id="epb-gate-form">
+          <input type="email" id="epb-email" placeholder="you@company.com" required>
+          <button type="submit" id="epb-gate-submit">Generate Summary</button>
+        </form>
+        <div id="epb-gate-msg" style="font-size: 11px; margin-top: 8px;"></div>
+      </div>
+
+      <div class="epb-summary-output" id="epb-summary-output"></div>
+      <div class="epb-summary-actions" id="epb-summary-actions" style="display:none;">
+        <button id="epb-copy">Copy to Clipboard</button>
+        <button id="epb-download">Download as Text File</button>
+        <button id="epb-print">Print / Save as PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p>&copy; 2026 Cyber Insurance Central. Part of the Machines &amp; Words network.</p>
+  </div>
+</footer>
+
+<script src="/nav.js"></script>
+<script src="/newsletter.js"></script>
+<script>
+(function () {
+  const STORAGE_KEY = 'epb-entries-v1';
+  const WORKER_URL = 'https://newsletter-cyberinsurancecentral.whereismy328.workers.dev/subscribe';
+  const GROUP_ID = '193395108513580215';
+
+  const CATEGORIES = [
+    {
+      id: 'mfa', label: 'MFA', core: true,
+      guideAnchor: '/guides/evidence-collection-and-packaging/#what-it-contains',
+      fields: [
+        { key: 'level', label: 'Enforcement', type: 'select', options: [
+          ['', 'Select...'],
+          ['enforced-all', 'Enforced — all users & privileged'],
+          ['enforced-users', 'Enforced — users only'],
+          ['available', 'Available but not enforced'],
+          ['none', 'Not deployed']
+        ]},
+        { key: 'verified', label: 'Last verified', type: 'date' },
+        { key: 'notes', label: 'Notes', type: 'text' }
+      ]
+    },
+    {
+      id: 'edr', label: 'Endpoint Detection & Response', core: true,
+      guideAnchor: '/guides/evidence-collection-and-packaging/#what-it-contains',
+      fields: [
+        { key: 'coverage', label: 'Coverage %', type: 'text' },
+        { key: 'verified', label: 'Last verified', type: 'date' },
+        { key: 'notes', label: 'Notes', type: 'text' }
+      ]
+    },
+    {
+      id: 'backups', label: 'Backups', core: true,
+      guideAnchor: '/guides/evidence-collection-and-packaging/#what-it-contains',
+      fields: [
+        { key: 'immutable', label: 'Offline/immutable', type: 'select', options: [
+          ['', 'Select...'], ['yes', 'Yes'], ['no', 'No']
+        ]},
+        { key: 'verified', label: 'Last restoration test', type: 'date' },
+        { key: 'notes', label: 'What was restored', type: 'text' }
+      ]
+    },
+    {
+      id: 'irplan', label: 'Incident Response Plan', core: true,
+      guideAnchor: '/guides/evidence-collection-and-packaging/#what-it-contains',
+      fields: [
+        { key: 'verified', label: 'Plan current as of', type: 'date' },
+        { key: 'tabletop', label: 'Last tabletop', type: 'date' },
+        { key: 'notes', label: 'Notes', type: 'text' }
+      ]
+    },
+    {
+      id: 'assets', label: 'Asset Inventory', core: true,
+      guideAnchor: '/guides/evidence-collection-and-packaging/',
+      fields: [
+        { key: 'verified', label: 'Last updated', type: 'date' },
+        { key: 'notes', label: 'Notes', type: 'text' }
+      ]
+    },
+    {
+      id: 'vendor', label: 'Vendor / Third-Party Risk', core: true,
+      guideAnchor: '/guides/evidence-collection-and-packaging/',
+      fields: [
+        { key: 'inplace', label: 'Program in place', type: 'select', options: [
+          ['', 'Select...'], ['yes', 'Yes'], ['no', 'No']
+        ]},
+        { key: 'verified', label: 'Last reviewed', type: 'date' },
+        { key: 'notes', label: 'Notes', type: 'text' }
+      ]
+    },
+    {
+      id: 'training', label: 'Security Awareness Training', core: true,
+      guideAnchor: '/guides/evidence-collection-and-packaging/',
+      fields: [
+        { key: 'verified', label: 'Last training', type: 'date' },
+        { key: 'phishing', label: 'Phishing sim completed', type: 'select', options: [
+          ['', 'Select...'], ['yes', 'Yes'], ['no', 'No']
+        ]},
+        { key: 'notes', label: 'Notes', type: 'text' }
+      ]
+    },
+    {
+      id: 'pentest', label: 'Penetration Testing', core: false,
+      guideAnchor: '/guides/evidence-collection-and-packaging/',
+      fields: [
+        { key: 'verified', label: 'Last test', type: 'date' },
+        { key: 'remediated', label: 'Findings remediated', type: 'select', options: [
+          ['', 'Select...'], ['yes', 'Yes'], ['partial', 'Partially'], ['no', 'No']
+        ]},
+        { key: 'notes', label: 'Notes', type: 'text' }
+      ]
+    },
+    {
+      id: 'compliance', label: 'Compliance Certifications', core: false,
+      guideAnchor: '/guides/evidence-collection-and-packaging/',
+      repeatable: true,
+      certOptions: ['SOC 2 Type I', 'SOC 2 Type II', 'ISO 27001', 'ISO 27701', 'PCI DSS', 'HITRUST', 'HIPAA', 'FedRAMP', 'NIST CSF', 'CMMC'],
+      fields: [
+        { key: 'notes', label: 'Notes', type: 'text' }
+      ]
+    }
+  ];
+
+  let state = {};
+  try {
+    state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  } catch (e) { state = {}; }
+
+  function save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function getEntry(catId) {
+    return state[catId] || {};
+  }
+
+  function monthsAgo(dateStr) {
+    if (!dateStr) return null;
+    const then = new Date(dateStr);
+    if (isNaN(then)) return null;
+    const now = new Date();
+    return (now - then) / (1000 * 60 * 60 * 24 * 30.4);
+  }
+
+  function computeStatus(cat) {
+    const entry = getEntry(cat.id);
+    if (entry.override) return entry.override;
+    if (cat.repeatable) {
+      const rows = entry.rows || [];
+      const dates = rows.map(r => r.renewed).filter(Boolean);
+      if (dates.length === 0) return 'not-started';
+      const mostRecent = dates.reduce((latest, d) => {
+        return (!latest || new Date(d) > new Date(latest)) ? d : latest;
+      }, null);
+      const age = monthsAgo(mostRecent);
+      if (age === null) return 'not-started';
+      return age > 12 ? 'needs-update' : 'current';
+    }
+    const dateField = cat.fields.find(f => f.type === 'date' && f.key === 'verified');
+    if (!dateField) return 'not-started';
+    const val = entry.verified;
+    if (!val) return 'not-started';
+    const age = monthsAgo(val);
+    if (age === null) return 'not-started';
+    return age > 12 ? 'needs-update' : 'current';
+  }
+
+  function statusLabel(status) {
+    if (status === 'current') return 'Current';
+    if (status === 'needs-update') return 'Needs Update';
+    return 'Not Started';
+  }
+
+  function renderCount() {
+    const core = CATEGORIES.filter(c => c.core);
+    const currentCount = core.filter(c => computeStatus(c) === 'current').length;
+    document.getElementById('epb-count').textContent = currentCount + ' of ' + core.length + ' core categories current';
+  }
+
+  function renderCategories() {
+    const container = document.getElementById('epb-categories');
+
+    // One shared datalist for certification name suggestions across the tool
+    const certDatalist = CATEGORIES.find(c => c.repeatable);
+    const datalistHtml = certDatalist
+      ? '<datalist id="epb-cert-options">' + certDatalist.certOptions.map(o => '<option value="' + o + '">').join('') + '</datalist>'
+      : '';
+
+    container.innerHTML = datalistHtml + CATEGORIES.map(function (cat) {
+      const entry = getEntry(cat.id);
+      const status = computeStatus(cat);
+
+      let repeatableHtml = '';
+      if (cat.repeatable) {
+        const rows = entry.rows && entry.rows.length ? entry.rows : [{ cert: '', renewed: '' }];
+        repeatableHtml =
+          '<div class="epb-repeat-header"><div>Certification</div><div>Last Renewed</div><div></div></div>' +
+          rows.map(function (row, i) {
+            return (
+              '<div class="epb-repeat-row">' +
+                '<input type="text" list="epb-cert-options" placeholder="e.g. SOC 2 Type II" data-repeat-cat="' + cat.id + '" data-repeat-idx="' + i + '" data-repeat-field="cert" value="' + (row.cert || '').replace(/"/g, '&quot;') + '">' +
+                '<input type="date" data-repeat-cat="' + cat.id + '" data-repeat-idx="' + i + '" data-repeat-field="renewed" value="' + (row.renewed || '') + '">' +
+                '<button type="button" class="epb-repeat-remove" data-repeat-remove-cat="' + cat.id + '" data-repeat-remove-idx="' + i + '" title="Remove row">&times;</button>' +
+              '</div>'
+            );
+          }).join('') +
+          '<button type="button" class="epb-repeat-add" data-repeat-add-cat="' + cat.id + '">+ Add certification</button>';
+      }
+
+      const fieldsHtml = cat.fields.map(function (f) {
+        const val = entry[f.key] || '';
+        if (f.type === 'select') {
+          const opts = f.options.map(function (o) {
+            return '<option value="' + o[0] + '"' + (val === o[0] ? ' selected' : '') + '>' + o[1] + '</option>';
+          }).join('');
+          return (
+            '<div class="epb-field-row">' +
+              '<label class="epb-field-label">' + f.label + '</label>' +
+              '<select data-cat="' + cat.id + '" data-field="' + f.key + '">' + opts + '</select>' +
+            '</div>'
+          );
+        }
+        const type = f.type === 'date' ? 'date' : 'text';
+        return (
+          '<div class="epb-field-row">' +
+            '<label class="epb-field-label">' + f.label + '</label>' +
+            '<input type="' + type + '" data-cat="' + cat.id + '" data-field="' + f.key + '" value="' + val.replace(/"/g, '&quot;') + '">' +
+          '</div>'
+        );
+      }).join('');
+
+      return (
+        '<div class="epb-category" data-category-id="' + cat.id + '">' +
+          '<div class="epb-category-header">' +
+            '<div class="epb-category-title">' + cat.label + (cat.core ? '' : '<span class="epb-category-optional">Optional</span>') + '</div>' +
+            '<div class="epb-status ' + status + '">' + statusLabel(status) + '</div>' +
+          '</div>' +
+          repeatableHtml +
+          fieldsHtml +
+          '<div class="epb-override">' +
+            '<input type="checkbox" data-override-cat="' + cat.id + '" ' + (entry.override ? 'checked' : '') + '> ' +
+            'Mark current regardless of date (control unchanged, doesn\'t need re-verification)' +
+          '</div>' +
+          '<div class="epb-guide-link"><a href="' + cat.guideAnchor + '">What counts as evidence for this category &rarr;</a></div>' +
+        '</div>'
+      );
+    }).join('');
+
+    wireRepeatableRows();
+    wireStandardFields();
+    wireOverrides();
+  }
+
+  function wireRepeatableRows() {
+    const container = document.getElementById('epb-categories');
+
+    container.querySelectorAll('[data-repeat-cat]').forEach(function (el) {
+      el.addEventListener('input', function () {
+        const catId = el.dataset.repeatCat;
+        const idx = parseInt(el.dataset.repeatIdx, 10);
+        const field = el.dataset.repeatField;
+        state[catId] = state[catId] || {};
+        state[catId].rows = state[catId].rows || [{ cert: '', renewed: '' }];
+        state[catId].rows[idx] = state[catId].rows[idx] || { cert: '', renewed: '' };
+        state[catId].rows[idx][field] = el.value;
+        save();
+        renderCount();
+        updateStatusBadge(catId);
+      });
+    });
+
+    container.querySelectorAll('[data-repeat-add-cat]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        const catId = el.dataset.repeatAddCat;
+        state[catId] = state[catId] || {};
+        state[catId].rows = state[catId].rows || [];
+        state[catId].rows.push({ cert: '', renewed: '' });
+        save();
+        renderCategories();
+        renderCount();
+      });
+    });
+
+    container.querySelectorAll('[data-repeat-remove-cat]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        const catId = el.dataset.repeatRemoveCat;
+        const idx = parseInt(el.dataset.repeatRemoveIdx, 10);
+        if (state[catId] && state[catId].rows) {
+          state[catId].rows.splice(idx, 1);
+          if (state[catId].rows.length === 0) state[catId].rows.push({ cert: '', renewed: '' });
+        }
+        save();
+        renderCategories();
+        renderCount();
+      });
+    });
+  }
+
+  function updateStatusBadge(catId) {
+    const cat = CATEGORIES.find(c => c.id === catId);
+    const catEl = document.querySelector('.epb-category[data-category-id="' + catId + '"]');
+    if (!catEl) return;
+    const statusEl = catEl.querySelector('.epb-status');
+    const newStatus = computeStatus(cat);
+    statusEl.className = 'epb-status ' + newStatus;
+    statusEl.textContent = statusLabel(newStatus);
+  }
+
+  function wireStandardFields() {
+    const container = document.getElementById('epb-categories');
+    container.querySelectorAll('input[data-cat], select[data-cat]').forEach(function (el) {
+      el.addEventListener('input', function () {
+        const catId = el.dataset.cat;
+        const field = el.dataset.field;
+        state[catId] = state[catId] || {};
+        state[catId][field] = el.value;
+        save();
+        renderCount();
+        updateStatusBadge(catId);
+      });
+    });
+  }
+
+  function wireOverrides() {
+    const container = document.getElementById('epb-categories');
+    container.querySelectorAll('input[data-override-cat]').forEach(function (el) {
+      el.addEventListener('change', function () {
+        const catId = el.dataset.overrideCat;
+        state[catId] = state[catId] || {};
+        state[catId].override = el.checked ? 'current' : null;
+        save();
+        renderCount();
+        updateStatusBadge(catId);
+      });
+    });
+  }
+
+  function buildSummaryText() {
+    let lines = ['EVIDENCE PACKAGE SUMMARY', 'Generated ' + new Date().toISOString().slice(0, 10), ''];
+    CATEGORIES.forEach(function (cat) {
+      const entry = getEntry(cat.id);
+      const status = computeStatus(cat);
+      lines.push((cat.core ? '' : '[OPTIONAL] ') + cat.label.toUpperCase() + ' — ' + statusLabel(status));
+
+      if (cat.repeatable) {
+        const rows = (entry.rows || []).filter(r => r.cert || r.renewed);
+        if (rows.length === 0) {
+          lines.push('  No certifications listed');
+        } else {
+          rows.forEach(function (row) {
+            lines.push('  ' + (row.cert || '(unnamed)') + ': last renewed ' + (row.renewed || 'unknown'));
+          });
+        }
+      }
+
+      cat.fields.forEach(function (f) {
+        if (entry[f.key]) {
+          let displayVal = entry[f.key];
+          if (f.type === 'select') {
+            const opt = f.options.find(o => o[0] === displayVal);
+            if (opt) displayVal = opt[1];
+          }
+          lines.push('  ' + f.label + ': ' + displayVal);
+        }
+      });
+      lines.push('');
+    });
+    return lines.join('\n');
+  }
+
+  document.getElementById('epb-gate-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const email = document.getElementById('epb-email').value.trim();
+    const btn = document.getElementById('epb-gate-submit');
+    const msg = document.getElementById('epb-gate-msg');
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      msg.textContent = 'Please enter a valid email address.';
+      msg.style.color = '#991b1b';
+      return;
+    }
+    btn.disabled = true;
+    msg.textContent = 'Generating...';
+    msg.style.color = 'var(--faint)';
+
+    fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, group_id: GROUP_ID })
+    })
+      .then(function (res) { return res.json(); })
+      .then(function () {
+        msg.textContent = 'Summary generated below.';
+        msg.style.color = 'var(--accent)';
+        const output = document.getElementById('epb-summary-output');
+        output.style.display = 'block';
+        output.textContent = buildSummaryText();
+        document.getElementById('epb-summary-actions').style.display = 'flex';
+      })
+      .catch(function () {
+        msg.textContent = 'Something went wrong. Try again.';
+        msg.style.color = '#991b1b';
+        btn.disabled = false;
+      });
+  });
+
+  document.getElementById('epb-copy').addEventListener('click', function () {
+    navigator.clipboard.writeText(buildSummaryText());
+    this.textContent = 'Copied';
+    setTimeout(() => { this.textContent = 'Copy to Clipboard'; }, 1500);
+  });
+
+  document.getElementById('epb-download').addEventListener('click', function () {
+    const blob = new Blob([buildSummaryText()], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'evidence-package-summary.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById('epb-print').addEventListener('click', function () {
+    window.print();
+  });
+
+  renderCategories();
+  renderCount();
+})();
+</script>
+</body>
+</html>

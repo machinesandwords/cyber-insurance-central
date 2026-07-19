@@ -1,6 +1,9 @@
 // ═══════════════════════════════════════════════════════════
 // SITE CONFIG — cyberinsurancecentral.com
-// Sets CSS variables before page render. Must load before content.
+// SITE.name/nameHtml/tagline are used by nav.js and other scripts.
+// Accent colors are set via inline <style> block in each page's <head>,
+// not here — do not re-add setProperty calls for --accent/--accent-dim/
+// --accent-pale, that would just redundantly reset what's already set.
 // ═══════════════════════════════════════════════════════════
 
 const SITE = {
@@ -13,10 +16,4 @@ const SITE = {
   accentPale: "#F7F1E3"
 };
 
-(function () {
-  const root = document.documentElement;
-  root.style.setProperty('--accent', SITE.accent);
-  root.style.setProperty('--accent-dim', SITE.accentDim);
-  root.style.setProperty('--accent-pale', SITE.accentPale);
-  document.title = document.title || SITE.name;
-})();
+document.title = document.title || SITE.name;

@@ -1,64 +1,62 @@
-// ═══════════════════════════════════════════════════════════
-// NAV — cyberinsurancecentral.com
-// Injects topbar + sidebar. Loads after content, before newsletter.js.
-// Live pages only — do not add links to pages that do not exist yet.
-// ═══════════════════════════════════════════════════════════
+/**
+ * nav.js — Shared sidebar navigation
+ * cyberinsurancecentral.com
+ * Injected into every page. Edit once, updates everywhere.
+ */
 
-const NAV = [
-  {
-    section: "Start",
-    items: [
-      { label: "Home", url: "/", depth: 0 }
-    ]
-  },
-  {
-    section: "Landscape",
-    items: [
-      { label: "Market Overview", url: "/landscape/", depth: 0 },
-      { label: "Coverage Components", url: "/landscape/coverage-components/", depth: 1 },
-      { label: "Underwriting Requirements", url: "/landscape/underwriting-requirements/", depth: 1 },
-      { label: "Market Conditions", url: "/landscape/market-conditions/", depth: 1 },
-      { label: "Carriers", url: "/landscape/carriers/", depth: 1 }
-    ]
-  },
-  {
-    section: "About",
-    items: [
-      { label: "About This Site", url: "/about/", depth: 0 }
-    ]
-  }
-];
+(function() {
+  const nav = `
+    <div class="nav-section">
+      <div class="nav-section-label">Landscape</div>
+      <a href="/landscape/" class="nav-item depth-0">Market overview</a>
+      <a href="/landscape/coverage-components/" class="nav-item depth-1">├ Coverage components</a>
+      <a href="/landscape/underwriting-requirements/" class="nav-item depth-1">├ Underwriting requirements</a>
+      <a href="/landscape/market-conditions/" class="nav-item depth-1">├ Market conditions</a>
+      <a href="/landscape/carriers/" class="nav-item depth-1">└ Carriers</a>
+    </div>
 
-(function () {
-  const path = window.location.pathname.replace(/\/index\.html$/, '/').replace(/\/$/, '/') || '/';
+    <div class="nav-divider"></div>
 
-  function isActive(url) {
-    const norm = u => u.replace(/\/$/, '/') || '/';
-    return norm(url) === norm(path);
-  }
+    <div class="nav-section">
+      <div class="nav-section-label">Guides</div>
+      <a href="/guides/" class="nav-item depth-0">All guides</a>
+      <a href="/guides/who-should-be-in-the-room/" class="nav-item depth-1">├ Getting ready to buy</a>
+      <a href="/guides/how-to-compare-cyber-insurance-quotes/" class="nav-item depth-1">├ Evaluating carriers &amp; quotes</a>
+      <a href="/guides/evidence-collection-and-packaging/" class="nav-item depth-1">├ Underwriting &amp; controls</a>
+      <a href="/guides/renewal-leverage/" class="nav-item depth-1">├ Renewal &amp; ongoing management</a>
+      <a href="/guides/incident-response-panel/" class="nav-item depth-1">└ Claims &amp; incidents</a>
+    </div>
 
-  const topbar = document.createElement('div');
-  topbar.className = 'topbar';
-  topbar.innerHTML = `
-    <a href="/" class="topbar-brand">${SITE.nameHtml}</a>
-    <div class="topbar-divider"></div>
-    <div class="topbar-tagline">${SITE.tagline}</div>
+    <div class="nav-divider"></div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">About</div>
+      <a href="/about/" class="nav-item depth-0">About this site</a>
+    </div>
+
+    <div class="nav-divider"></div>
+
+    <div class="nav-section">
+      <a href="/#stay-informed" class="nav-item depth-0 nav-subscribe">Subscribe &rarr;</a>
+    </div>
   `;
 
-  const sidebar = document.createElement('div');
-  sidebar.className = 'sidebar';
-  let sidebarHtml = '';
-  NAV.forEach(section => {
-    sidebarHtml += `<div class="nav-section">`;
-    sidebarHtml += `<div class="nav-section-label">${section.section}</div>`;
-    section.items.forEach(item => {
-      const activeClass = isActive(item.url) ? ' active' : '';
-      sidebarHtml += `<a href="${item.url}" class="nav-item depth-${item.depth}${activeClass}">${item.label}</a>`;
-    });
-    sidebarHtml += `</div>`;
-  });
-  sidebar.innerHTML = sidebarHtml;
+  // Inject into element with id="sidebar-nav"
+  const container = document.getElementById('sidebar-nav');
+  if (container) {
+    container.innerHTML = nav;
 
-  document.body.insertBefore(sidebar, document.body.firstChild);
-  document.body.insertBefore(topbar, document.body.firstChild);
+    // Auto-highlight active link based on current path
+    const path = window.location.pathname;
+    const links = container.querySelectorAll('a.nav-item');
+    links.forEach(link => {
+      const href = link.getAttribute('href');
+      if (!link.textContent.includes('more')) {
+        if (href === path || (href !== '/' && path.startsWith(href))) {
+          link.classList.add('active');
+        }
+      }
+    });
+  }
+
 })();
