@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Insurance Underwriting Requirements — What Carriers Expect | Cyber Insurance Central</title>
+<meta name="description" content="The core security controls carriers now require before writing a cyber policy at a competitive rate, and why attestation is no longer enough.">
+<link rel="canonical" href="https://cyberinsurancecentral.com/landscape/underwriting-requirements/">
+<meta property="og:title" content="Underwriting Requirements — Cyber Insurance Central">
+<meta property="og:description" content="What carriers require before they'll write a cyber policy at a competitive rate.">
+<meta property="og:url" content="https://cyberinsurancecentral.com/landscape/underwriting-requirements/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://cyberinsurancecentral.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cyberinsurancecentral.com/og-image.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<script src="/config.js"></script>
+</head>
+<body>
+<div class="layout">
+  <div class="main">
+    <div class="content">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="/landscape/">Landscape</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>Underwriting Requirements</span>
+      </div>
+
+      <span class="page-label">Landscape</span>
+      <h1>Underwriting Requirements</h1>
+      <p class="lead">
+        Underwriting requirements are what a carrier wants to see before it will
+        sell you a policy, or sell it to you at a rate that doesn't punish you
+        for risk you don't actually carry.
+      </p>
+
+      <h2 id="core-controls">The core control set</h2>
+
+      <p>
+        Multi-factor authentication has moved from a recommended practice to
+        close to a baseline requirement, particularly for remote access and for
+        any account with administrative privileges. Carriers care about this
+        specifically because credential theft remains one of the most common ways
+        attackers get an initial foothold, and MFA closes off a large share of
+        that path cheaply relative to the loss it prevents. A buyer without MFA
+        on privileged accounts should expect a higher premium, a higher
+        retention, or an outright decline.
+      </p>
+
+      <p>
+        Endpoint detection and response tools have become similarly expected,
+        especially for organizations of any real size. Carriers want evidence
+        that an attacker's presence on a device will be detected and can be acted
+        on quickly, since dwell time, how long an attacker sits undetected inside
+        a network, correlates directly with how large and expensive a claim
+        eventually becomes.
+      </p>
+
+      <p>
+        Tested, offline, or immutable backups matter because ransomware's
+        leverage depends entirely on the victim having no other way to recover
+        data. A backup that an attacker can also encrypt or delete isn't a backup
+        carriers give much credit for. "Tested" is the operative word here too: a
+        backup that has never actually been restored is an assumption, not a
+        control, and some carriers now ask directly whether restoration has been
+        tested and how recently.
+      </p>
+
+      <p>
+        A documented, and ideally rehearsed, incident response plan rounds out
+        the core set. Carriers have seen enough claims to know that response
+        speed and coordination materially affect how large a loss grows, and an
+        organization with no plan tends to spend its first critical hours after
+        an incident figuring out who's in charge instead of containing the
+        damage.
+      </p>
+
+      <h2 id="attestation-vs-evidence">Attestation versus evidence</h2>
+
+      <p>
+        For years, most of this was self-reported. A buyer filled out a
+        questionnaire, checked boxes, and the carrier largely took the answers at
+        face value. That's changing. A growing number of carriers now require
+        external security scans, formal assessments, or continuous monitoring
+        tools as a condition of coverage.
+      </p>
+
+      <p>
+        This shift matters more than it might first appear, because of how it
+        interacts with the <a href="/landscape/coverage-components/">failure-to-maintain
+        exclusion</a> covered on the coverage components page. Checking a box for
+        a control that isn't actually running is no longer just a risk of a bad
+        renewal down the line. If a claim comes in and the carrier discovers
+        during the investigation that a represented control wasn't real, the
+        exclusion can void the claim entirely. Underqualifying honestly and
+        paying a higher premium is a materially better position than
+        misrepresenting a control and losing the claim later.
+      </p>
+
+      <h2 id="scale">Requirements scale with size and exposure</h2>
+
+      <p>
+        None of this applies identically to every buyer. A small company with
+        limited customer data and modest revenue faces a lighter underwriting bar
+        than an enterprise handling regulated health or financial data, or one
+        that operates infrastructure a nation-state attacker might specifically
+        target. The core controls above are close to universal expectations at
+        this point, but the depth of evidence a carrier demands, and how strictly
+        it enforces the failure-to-maintain exclusion, scales with how much is
+        actually at stake if that buyer gets breached.
+      </p>
+
+      <h2 id="where-this-leaves-a-buyer">Where this leaves a buyer</h2>
+
+      <p>
+        The organizations getting the best terms right now aren't the ones
+        writing the most persuasive application. They're the ones who can
+        produce evidence, not just an attestation, that the core controls are
+        actually running, and who understand that a gap honestly disclosed is a
+        pricing problem, while a gap concealed is a claim problem waiting to
+        happen.
+      </p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p>&copy; 2026 Cyber Insurance Central. Part of the Machines &amp; Words network.</p>
+  </div>
+</footer>
+
+<script src="/nav.js"></script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

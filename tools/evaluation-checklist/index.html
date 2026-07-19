@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>IIoT Platform Evaluation Checklist | Industrial IoT Software</title>
+  <meta name="description" content="Score IIoT platform finalists side by side across evaluation categories.">
+  <link rel="canonical" href="https://industrialiotsoftware.com/tools/evaluation-checklist/">
+
+  <meta property="og:title" content="IIoT Platform Evaluation Checklist | Industrial IoT Software">
+  <meta property="og:description" content="Score two IIoT platform finalists side by side across six evaluation categories.">
+  <meta property="og:image" content="https://industrialiotsoftware.com/og-image.png">
+  <meta property="og:url" content="https://industrialiotsoftware.com/tools/evaluation-checklist/">
+  <meta property="og:type" content="website">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "IIoT Platform Evaluation Checklist",
+    "url": "https://industrialiotsoftware.com/tools/evaluation-checklist/",
+    "description": "Score two IIoT platform finalists side by side across six evaluation categories. Identify gaps and export a scorecard for your steering committee.",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://industrialiotsoftware.com" },
+      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://industrialiotsoftware.com/tools/" },
+      { "@type": "ListItem", "position": 3, "name": "Evaluation Checklist", "item": "https://industrialiotsoftware.com/tools/evaluation-checklist/" }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>:root{--accent:#0A7E6A;--accent-dim:#087558;--accent-pale:#e6f4f1}</style>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/config.js" defer></script>
+
+  <style>
+    /* ── Vendor selector bar ── */
+    .vendor-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: var(--hairline);
+      margin-bottom: 1px;
+    }
+    .vendor-cell {
+      background: var(--surface);
+      padding: 14px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .vendor-cell label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .vendor-cell select,
+    .vendor-cell input[type="text"] {
+      width: 100%;
+      background: var(--bg);
+      border: var(--hairline);
+      font-family: 'Space Mono', monospace;
+      font-size: var(--small);
+      font-weight: 700;
+      color: var(--charcoal);
+      padding: 6px 10px;
+      outline: none;
+      border-radius: 0;
+    }
+    .vendor-cell select {
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b6b68'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 28px;
+    }
+    .vendor-cell select:focus,
+    .vendor-cell input[type="text"]:focus { border-color: var(--accent); }
+    .vendor-custom-input { display: none; margin-top: 4px; }
+    .vendor-custom-input.visible { display: block; }
+
+    /* ── Score summary bar ── */
+    .score-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: var(--hairline);
+      border-top: none;
+      margin-bottom: 24px;
+    }
+    .score-cell {
+      background: var(--charcoal);
+      padding: 14px 20px;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .score-total { font-size: 28px; font-weight: 700; color: var(--accent); line-height: 1; }
+    .score-denom { font-size: var(--small); color: var(--faint); }
+    .score-vendor-name { font-size: 11px; font-weight: 700; color: white; letter-spacing: 0.04em; margin-left: auto; text-align: right; }
+    .score-winner { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); padding: 1px 6px; margin-left: 6px; white-space: nowrap; }
+
+    /* ── Category block ── */
+    .category-block { border: var(--hairline); border-bottom: none; }
+    .category-block:last-of-type { border-bottom: var(--hairline); margin-bottom: 24px; }
+    .category-header { display: grid; grid-template-columns: 1fr auto auto auto; align-items: center; gap: 12px; padding: 10px 16px; background: var(--bg); border-bottom: var(--hairline); cursor: pointer; user-select: none; }
+    .category-header:hover { background: var(--accent-pale); }
+    .category-title { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--charcoal); }
+    .category-persona { font-size: 10px; color: var(--faint); letter-spacing: 0.04em; text-transform: uppercase; }
+    .cat-score { font-size: var(--small); font-weight: 700; }
+    .cat-score .v1 { color: var(--accent); }
+    .cat-score .v2 { color: var(--mid); }
+    .cat-score .sep { color: var(--border); margin: 0 2px; }
+    .category-toggle { font-size: 14px; color: var(--faint); width: 16px; text-align: center; transition: transform 0.2s; }
+    .category-block.collapsed .category-toggle { transform: rotate(-90deg); }
+    .category-block.collapsed .category-items { display: none; }
+    .category-block.collapsed .cat-bar-row { display: none; }
+
+    /* ── Checklist item ── */
+    .checklist-item { display: grid; grid-template-columns: 1fr auto auto; align-items: start; gap: 16px; padding: 12px 16px; border-bottom: var(--hairline); }
+    .checklist-item:last-child { border-bottom: none; }
+    .item-text { font-size: var(--small); color: var(--charcoal); line-height: 1.6; }
+    .item-hint { font-size: 11px; color: var(--faint); font-style: italic; margin-top: 2px; line-height: 1.5; }
+    .score-col { display: flex; flex-direction: column; align-items: center; }
+    .score-col-label { font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--faint); margin-bottom: 3px; white-space: nowrap; max-width: 80px; overflow: hidden; text-overflow: ellipsis; }
+    .score-btns { display: flex; gap: 2px; }
+    .score-btn { width: 28px; height: 28px; border: var(--hairline); background: var(--bg); font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; color: var(--faint); cursor: pointer; border-radius: 0; display: flex; align-items: center; justify-content: center; transition: background 0.1s, color 0.1s, border-color 0.1s; }
+    .score-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .score-btn.active-0 { background: #fee2e2; border-color: #991b1b; color: #991b1b; }
+    .score-btn.active-1 { background: #fef3c7; border-color: #b45309; color: #b45309; }
+    .score-btn.active-2 { background: var(--accent-pale); border-color: var(--accent); color: var(--accent); }
+
+    /* ── Category progress bar ── */
+    .cat-bar-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border-top: var(--hairline); }
+    .cat-bar-cell { background: var(--surface); padding: 7px 16px; display: flex; align-items: center; gap: 8px; }
+    .cat-bar-track { flex: 1; height: 4px; background: var(--border); position: relative; }
+    .cat-bar-fill { position: absolute; left: 0; top: 0; height: 100%; background: var(--accent); transition: width 0.3s ease; }
+    .cat-bar-fill.v2 { background: var(--mid); }
+    .cat-bar-pct { font-size: 11px; font-weight: 700; color: var(--faint); min-width: 32px; text-align: right; }
+
+    /* ── Gap summary ── */
+    .gap-section { border: var(--hairline); margin-bottom: 24px; }
+    .gap-header { padding: 10px 16px; background: var(--bg); border-bottom: var(--hairline); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); }
+    .gap-row { display: grid; grid-template-columns: 1fr 80px 80px; border-bottom: var(--hairline); font-size: 11px; }
+    .gap-row:last-child { border-bottom: none; }
+    .gap-row-header { background: var(--bg); }
+    .gap-row-header .gap-item { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--faint); }
+    .gap-row-header .gap-score { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--faint); }
+    .gap-item { padding: 8px 16px; color: var(--charcoal); }
+    .gap-score { padding: 8px 12px; text-align: center; font-weight: 700; border-left: var(--hairline); }
+    .gap-score.winner { color: var(--accent); }
+    .gap-score.loser  { color: #991b1b; }
+    .gap-score.tied   { color: var(--mid); }
+
+    /* ── Decision summary ── */
+    .decision-summary {
+      background: var(--charcoal);
+      margin-bottom: 24px;
+      border: var(--hairline);
+    }
+    .decision-summary-header {
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .decision-summary-body { padding: 24px; }
+    .decision-headline {
+      font-size: var(--h2);
+      font-weight: 700;
+      color: white;
+      margin-bottom: 20px;
+      line-height: 1.3;
+    }
+    .decision-scores {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 20px;
+    }
+    .decision-score-cell {
+      background: rgba(255,255,255,0.10);
+      padding: 14px 16px;
+    }
+    .decision-score-name {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.4); margin-bottom: 4px;
+    }
+    .decision-score-value { font-size: 32px; font-weight: 700; line-height: 1; }
+    .decision-score-value.winner { color: var(--accent); }
+    .decision-score-value.loser  { color: rgba(255,255,255,0.3); }
+    .decision-score-sub { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 4px; }
+    .decision-detail { font-size: var(--small); color: rgba(255,255,255,0.55); line-height: 1.75; }
+    .decision-detail strong { color: rgba(255,255,255,0.85); }
+    .decision-empty { font-size: var(--small); color: rgba(255,255,255,0.35); font-style: italic; }
+
+    /* ── Gate bar ── */
+    .gate-bar { border: var(--hairline); background: var(--accent-pale); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .gate-bar-copy { font-size: var(--small); color: var(--mid); line-height: 1.6; }
+    .gate-bar-copy strong { color: var(--charcoal); }
+    .btn-export { flex-shrink: 0; background: var(--accent); color: white; border: none; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 9px 18px; cursor: pointer; border-radius: 0; white-space: nowrap; }
+    .btn-export:hover { background: var(--accent-dim); }
+
+    /* ── Modal ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(42,42,40,0.65); z-index: 200; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal-box { background: var(--surface); border: var(--hairline); max-width: 460px; width: 90%; padding: 28px; }
+    .modal-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .modal-top h2 { font-size: var(--h2); font-weight: 700; margin: 0; border: none; padding: 0; }
+    .modal-close { background: none; border: none; font-family: 'Space Mono', monospace; font-size: 18px; color: var(--faint); cursor: pointer; padding: 0; line-height: 1; }
+    .modal-close:hover { color: var(--charcoal); }
+    .modal-badge { display: inline-block; background: var(--accent); color: white; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; margin-bottom: 14px; }
+    .modal-box p { font-size: var(--small); color: var(--mid); line-height: 1.75; margin-bottom: 14px; }
+    .modal-box p strong { color: var(--charcoal); }
+    .modal-form { display: flex; gap: 8px; margin-bottom: 12px; }
+    .modal-form input[type="email"] { flex: 1; font-family: 'Space Mono', monospace; font-size: var(--small); padding: 8px 10px; border: var(--hairline); background: var(--bg); color: var(--charcoal); outline: none; border-radius: 0; }
+    .modal-form input[type="email"]:focus { border-color: var(--accent); }
+    .modal-form button { font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 8px 14px; background: var(--charcoal); color: white; border: none; cursor: pointer; border-radius: 0; white-space: nowrap; }
+    .modal-form button:hover { background: var(--accent); }
+    .modal-confirm { display: none; font-size: var(--small); color: var(--accent); font-weight: 700; margin-bottom: 12px; }
+    .modal-fine-print { font-size: 11px; color: var(--faint); line-height: 1.6; }
+
+    @media (max-width: 640px) {
+      .vendor-bar { grid-template-columns: 1fr; }
+      .score-bar   { grid-template-columns: 1fr; }
+      .checklist-item { grid-template-columns: 1fr; }
+      .gate-bar { flex-direction: column; align-items: flex-start; }
+      .decision-scores { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">Industrial <span>IoT</span> Software</div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-tagline">an independent guide for industrial IoT software buyers</div>
+    <div class="topbar-right"><a href="/subscribe">Subscribe</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <article class="content">
+
+        <div class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/tools/">Tools</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Evaluation Checklist</span>
+        </div>
+
+        <span class="page-label">Vendor Evaluation Tool</span>
+        <h1>IIoT Platform Evaluation Checklist</h1>
+        <p class="lead">Score two platform finalists against the criteria that determine production deployments. Use this after shortlisting vendors and before final selection. The gap summary flags where each vendor falls short against requirements your team has already agreed on.</p>
+
+        <div class="callout" style="margin-bottom:24px;">
+          <span class="callout-label">How scoring works</span>
+          <p>Score each criterion: 0 (not met), 1 (partially met), 2 (fully met). Categories collapse for focus. The gap summary flags any category where a vendor scores below 50%.</p>
+        </div>
+
+        <!-- Vendor selectors -->
+        <div class="vendor-bar">
+          <div class="vendor-cell">
+            <label>Vendor A</label>
+            <select id="v1-select" onchange="onVendorSelect(0)">
+              <option value="">Select a vendor...</option>
+              <option>Ignition by Inductive Automation</option>
+              <option>Kepware (PTC)</option>
+              <option>Azure IoT Operations (Microsoft)</option>
+              <option>AWS IoT Greengrass</option>
+              <option>Litmus Edge</option>
+              <option>Flutura Cerebra</option>
+              <option>Telit Cinterion</option>
+              <option>Prosys OPC UA</option>
+              <option>Aveva Edge</option>
+              <option>Softing Industrial</option>
+              <option>Siemens MindSphere</option>
+              <option>Rockwell FactoryTalk</option>
+              <option>GE Predix</option>
+              <option>Honeywell Forge</option>
+              <option value="__custom__">Custom...</option>
+            </select>
+            <input type="text" id="v1-custom" class="vendor-custom-input" placeholder="Enter vendor name" oninput="updateVendorNames()">
+          </div>
+          <div class="vendor-cell">
+            <label>Vendor B</label>
+            <select id="v2-select" onchange="onVendorSelect(1)">
+              <option value="">Select a vendor...</option>
+              <option>Ignition by Inductive Automation</option>
+              <option>Kepware (PTC)</option>
+              <option>Azure IoT Operations (Microsoft)</option>
+              <option>AWS IoT Greengrass</option>
+              <option>Litmus Edge</option>
+              <option>Flutura Cerebra</option>
+              <option>Telit Cinterion</option>
+              <option>Prosys OPC UA</option>
+              <option>Aveva Edge</option>
+              <option>Softing Industrial</option>
+              <option>Siemens MindSphere</option>
+              <option>Rockwell FactoryTalk</option>
+              <option>GE Predix</option>
+              <option>Honeywell Forge</option>
+              <option value="__custom__">Custom...</option>
+            </select>
+            <input type="text" id="v2-custom" class="vendor-custom-input" placeholder="Enter vendor name" oninput="updateVendorNames()">
+          </div>
+        </div>
+
+        <!-- Score totals -->
+        <div class="score-bar">
+          <div class="score-cell">
+            <span class="score-total" id="total-v1">0</span>
+            <span class="score-denom" id="denom-v1">/ 0 pts</span>
+            <span class="score-vendor-name" id="label-v1">Vendor A</span>
+          </div>
+          <div class="score-cell">
+            <span class="score-total" id="total-v2">0</span>
+            <span class="score-denom" id="denom-v2">/ 0 pts</span>
+            <span class="score-vendor-name" id="label-v2">Vendor B</span>
+          </div>
+        </div>
+
+        <div id="checklist-container"></div>
+
+        <div class="gap-section">
+          <div class="gap-header">Category Gap Summary</div>
+          <div id="gap-body"></div>
+        </div>
+
+        <!-- Decision summary -->
+        <div class="decision-summary">
+          <div class="decision-summary-header">Decision Summary</div>
+          <div class="decision-summary-body" id="decision-body">
+            <p class="decision-empty">Score at least one category to generate a summary.</p>
+          </div>
+        </div>
+
+        <div class="gate-bar">
+          <div class="gate-bar-copy">
+            <strong>PDF Scorecard</strong> &mdash; A formatted evaluation report with both vendor scores, category breakdowns, and the decision summary. The document you bring into a vendor negotiation or present to a steering committee.
+          </div>
+          <button class="btn-export" onclick="openModal()">Export PDF Scorecard</button>
+        </div>
+
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>The Fallout tracks vendor durability and M&amp;A risk across the cybersecurity market. Five days a week.</p>
+          <div class="newsletter-form">
+            <a href="https://thefalloutnews.substack.com/subscribe" target="_blank" rel="noopener" class="nl-cta">Subscribe to The Fallout</a>
+          </div>
+        </div>
+
+      </article>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="page-label">Industrial IoT Software</span>
+      <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+    </div>
+  </footer>
+
+  <div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+    <div class="modal-box">
+      <div class="modal-top">
+        <h2>Get Your PDF Scorecard</h2>
+        <button class="modal-close" onclick="closeModal()">&#215;</button>
+      </div>
+      <div class="modal-badge">Free Export</div>
+      <p>Enter your email to download a formatted scorecard with both vendor scores, category breakdowns, and the decision summary.</p>
+      <p>You will also receive buyer briefings, vendor analyses, and market intelligence for operations and controls teams.</p>
+      <div class="modal-form" id="modal-form">
+        <input type="email" id="modal-email" placeholder="your@email.com">
+        <button onclick="submitEmail()">Get PDF</button>
+      </div>
+      <div class="modal-confirm" id="modal-confirm" style="display:none;"></div>
+      <p class="modal-fine-print">No spam. Unsubscribe any time. Industrial IoT Software is published by Machines &amp; Words.</p>
+    </div>
+  </div>
+
+  <script>
+    var CATEGORIES = [
+      {
+        id: 'connectivity', title: 'Connectivity & Protocol Support', persona: 'Implementation Buyer',
+        items: [
+          { text: 'Native drivers for target PLC brands without third-party middleware', hint: 'Verify Allen-Bradley, Siemens, Mitsubishi, Omron as applicable to your fleet' },
+          { text: 'OPC-UA server and client support', hint: 'Both directions required for historian and SCADA integration' },
+          { text: 'Modbus TCP/RTU support', hint: 'Required for legacy field devices and many sensors' },
+          { text: 'MQTT publish/subscribe with configurable broker', hint: 'Verify Sparkplug B support if UNS architecture is planned' },
+          { text: 'Protocol translation at the edge without cloud dependency', hint: 'Critical for air-gapped or intermittently connected sites' },
+          { text: 'Support for at least one industrial Ethernet protocol (EtherNet/IP, PROFINET, EtherCAT)', hint: 'Verify against your specific automation hardware' }
+        ]
+      },
+      {
+        id: 'data-arch', title: 'Data Architecture & UNS', persona: 'Implementation Buyer',
+        items: [
+          { text: 'Configurable topic namespace aligned to ISA-95 hierarchy', hint: 'Enterprise / Site / Area / Line / Cell / Tag structure' },
+          { text: 'Context enrichment: ability to attach metadata to tags at ingestion', hint: 'Unit, description, and engineering limits attached at edge prevents context loss' },
+          { text: 'Change-of-value filtering configurable per tag', hint: 'Prevents unnecessary data volume from stable process values' },
+          { text: 'Dead-band and rate limiting configurable independently per tag', hint: 'Required for mixed fast/slow process environments' },
+          { text: 'Historical data replay and backfill on reconnect', hint: 'Edge buffer behavior when cloud connectivity is interrupted' }
+        ]
+      },
+      {
+        id: 'edge-mgmt', title: 'Edge Management', persona: 'Implementation Buyer',
+        items: [
+          { text: 'Centralized fleet management for edge gateways across multiple sites', hint: 'Managing 500 gateways individually is not viable at scale' },
+          { text: 'Remote OS and firmware updates with rollback capability', hint: 'Verify rollback is automated on failed update, not manual' },
+          { text: 'Remote diagnostic access without requiring VPN to the OT network', hint: 'Outbound-only connectivity model required for most OT security policies' },
+          { text: 'Edge health monitoring and alerting (CPU, memory, connectivity status)', hint: 'You need to know when a gateway goes dark before operations does' },
+          { text: 'Containerized edge runtime (Docker/OCI compatible)', hint: 'Required for running additional workloads alongside data collection' }
+        ]
+      },
+      {
+        id: 'security', title: 'Security & Compliance', persona: 'Operational Buyer',
+        items: [
+          { text: 'IEC 62443 alignment or certification', hint: 'The baseline security standard for industrial automation systems' },
+          { text: 'Role-based access control with MFA support', hint: 'Verify granularity: can you restrict access to individual tag paths?' },
+          { text: 'Data encrypted in transit (TLS 1.2+) and at rest', hint: 'Verify both edge-to-cloud and within-cloud storage' },
+          { text: 'Audit logging for configuration changes and data access', hint: 'Required for SOC 2 and most regulated industry compliance' },
+          { text: 'Support for air-gapped or network-isolated deployments', hint: 'Outbound-only connectivity model, no inbound connections to PLCs' },
+          { text: 'Vulnerability disclosure policy and documented patch cadence', hint: 'Ask for CVE history and average time-to-patch in the last 12 months' }
+        ]
+      },
+      {
+        id: 'integration', title: 'Integration & IT Alignment', persona: 'Visionary Buyer',
+        items: [
+          { text: 'Native connectors to target cloud platform (AWS, Azure, GCP)', hint: 'Verify your specific cloud and the services within it' },
+          { text: 'REST API for data access and platform configuration', hint: 'Required for integration with existing IT tooling and dashboards' },
+          { text: 'Webhook or event-driven integration support', hint: 'Enables real-time alerting to ITSM, CMMS, and ERP systems' },
+          { text: 'Historian integration (OSIsoft PI, Aveva, InfluxDB)', hint: 'Verify specific historian versions in use at your sites' },
+          { text: 'Support for IT-standard identity providers (SAML, OAuth, LDAP/AD)', hint: 'Non-negotiable for enterprise IT security policy compliance' }
+        ]
+      },
+      {
+        id: 'vendor', title: 'Vendor Viability & Support', persona: 'Operational Buyer',
+        items: [
+          { text: 'Reference customers in your industry vertical with production deployments', hint: 'Pilot references do not count. Ask for 2+ year production deployments.' },
+          { text: 'Transparent, predictable pricing at enterprise tag volumes', hint: 'Get a committed commercial model for 10x your pilot tag count' },
+          { text: 'SLA with defined uptime and support response times', hint: 'Verify SLA applies to your deployment model (SaaS vs. self-hosted)' },
+          { text: 'Professional services or certified partner network for implementation', hint: 'Assess whether the vendor can support a multi-site rollout without capacity constraints' },
+          { text: 'Documented data portability and exit process', hint: 'What happens to your historian data if you change vendors in year three?' }
+        ]
+      }
+    ];
+
+    var scores = {};
+    CATEGORIES.forEach(function(cat) {
+      scores[cat.id] = cat.items.map(function() { return [null, null]; });
+    });
+
+    function onVendorSelect(v) {
+      var selectId = v === 0 ? 'v1-select' : 'v2-select';
+      var customId = v === 0 ? 'v1-custom' : 'v2-custom';
+      var sel = document.getElementById(selectId);
+      var custom = document.getElementById(customId);
+      if (sel.value === '__custom__') { custom.classList.add('visible'); custom.focus(); }
+      else { custom.classList.remove('visible'); custom.value = ''; }
+      updateVendorNames();
+    }
+
+    function v1Name() {
+      var sel = document.getElementById('v1-select');
+      if (sel.value === '__custom__') return document.getElementById('v1-custom').value.trim() || 'Vendor A';
+      return sel.value || 'Vendor A';
+    }
+    function v2Name() {
+      var sel = document.getElementById('v2-select');
+      if (sel.value === '__custom__') return document.getElementById('v2-custom').value.trim() || 'Vendor B';
+      return sel.value || 'Vendor B';
+    }
+
+    function updateVendorNames() {
+      document.getElementById('label-v1').textContent = v1Name();
+      document.getElementById('label-v2').textContent = v2Name();
+      document.querySelectorAll('.score-col-label.v1').forEach(function(el){ el.textContent = v1Name(); });
+      document.querySelectorAll('.score-col-label.v2').forEach(function(el){ el.textContent = v2Name(); });
+      updateTotals(); updateGaps(); updateDecision();
+    }
+
+    function setScore(catId, itemIdx, vendor, val) {
+      var current = scores[catId][itemIdx][vendor];
+      scores[catId][itemIdx][vendor] = (current === val) ? null : val;
+      renderItem(catId, itemIdx);
+      updateCatBar(catId);
+      updateTotals(); updateGaps(); updateDecision();
+    }
+
+    function renderItem(catId, itemIdx) {
+      var s = scores[catId][itemIdx];
+      [0,1].forEach(function(v) {
+        [0,1,2].forEach(function(val) {
+          var btn = document.getElementById('btn-'+catId+'-'+itemIdx+'-'+v+'-'+val);
+          if (!btn) return;
+          btn.className = 'score-btn' + (s[v]===val ? ' active-'+val : '');
+        });
+      });
+    }
+
+    function catTotals(catId) {
+      var items = scores[catId];
+      var t1=0, t2=0, max=items.length*2;
+      items.forEach(function(item){
+        if (item[0]!==null) t1+=item[0];
+        if (item[1]!==null) t2+=item[1];
+      });
+      return { t1:t1, t2:t2, max:max };
+    }
+
+    function updateCatBar(catId) {
+      var t = catTotals(catId);
+      var b1=document.getElementById('catbar-'+catId+'-0');
+      var b2=document.getElementById('catbar-'+catId+'-1');
+      var p1=document.getElementById('catpct-'+catId+'-0');
+      var p2=document.getElementById('catpct-'+catId+'-1');
+      if (b1) b1.style.width = (t.t1/t.max*100)+'%';
+      if (b2) b2.style.width = (t.t2/t.max*100)+'%';
+      if (p1) p1.textContent = Math.round(t.t1/t.max*100)+'%';
+      if (p2) p2.textContent = Math.round(t.t2/t.max*100)+'%';
+      var hs = document.getElementById('catscore-'+catId);
+      if (hs) hs.innerHTML = '<span class="v1">'+t.t1+'</span><span class="sep">/</span><span class="v2">'+t.t2+'</span><span style="color:var(--faint);font-size:10px;margin-left:2px;">of '+t.max+'</span>';
+    }
+
+    function updateTotals() {
+      var g1=0, g2=0, gMax=0;
+      CATEGORIES.forEach(function(cat){ var t=catTotals(cat.id); g1+=t.t1; g2+=t.t2; gMax+=t.max; });
+      document.getElementById('total-v1').textContent = g1;
+      document.getElementById('total-v2').textContent = g2;
+      document.getElementById('denom-v1').textContent = '/ '+gMax+' pts';
+      document.getElementById('denom-v2').textContent = '/ '+gMax+' pts';
+      var lv1=document.getElementById('label-v1');
+      var lv2=document.getElementById('label-v2');
+      lv1.innerHTML = esc(v1Name()) + (g1>g2 && g1>0 ? ' <span class="score-winner">Leading</span>' : '');
+      lv2.innerHTML = esc(v2Name()) + (g2>g1 && g2>0 ? ' <span class="score-winner">Leading</span>' : '');
+    }
+
+    function updateGaps() {
+      var body = document.getElementById('gap-body');
+      var rows = '<div class="gap-row gap-row-header">'+
+        '<div class="gap-item">Category</div>'+
+        '<div class="gap-score" style="border-left:var(--hairline)">'+esc(v1Name())+'</div>'+
+        '<div class="gap-score" style="border-left:var(--hairline)">'+esc(v2Name())+'</div>'+
+      '</div>';
+      CATEGORIES.forEach(function(cat){
+        var t=catTotals(cat.id);
+        var pct1=t.max>0?Math.round(t.t1/t.max*100):0;
+        var pct2=t.max>0?Math.round(t.t2/t.max*100):0;
+        var anyScored = t.t1>0||t.t2>0;
+        var cls1, cls2;
+        if (!anyScored) { cls1=cls2='tied'; }
+        else if (pct1>pct2) { cls1='winner'; cls2='loser'; }
+        else if (pct2>pct1) { cls1='loser'; cls2='winner'; }
+        else { cls1=cls2='tied'; }
+        rows+='<div class="gap-row">'+
+          '<div class="gap-item">'+esc(cat.title)+'</div>'+
+          '<div class="gap-score '+cls1+'">'+pct1+'%</div>'+
+          '<div class="gap-score '+cls2+'">'+pct2+'%</div>'+
+        '</div>';
+      });
+      body.innerHTML = rows;
+    }
+
+    function updateDecision() {
+      var body = document.getElementById('decision-body');
+      var g1=0, g2=0, gMax=0;
+      CATEGORIES.forEach(function(cat){ var t=catTotals(cat.id); g1+=t.t1; g2+=t.t2; gMax+=t.max; });
+
+      if (g1===0 && g2===0) {
+        body.innerHTML = '<p class="decision-empty">Score at least one category to generate a summary.</p>';
+        return;
+      }
+
+      var pct1=gMax>0?Math.round(g1/gMax*100):0;
+      var pct2=gMax>0?Math.round(g2/gMax*100):0;
+      var n1=v1Name(), n2=v2Name();
+      var wins1=0, wins2=0, strongestAdv=null, strongestDiff=0, closestContest=null, closestDiff=999;
+
+      CATEGORIES.forEach(function(cat){
+        var t=catTotals(cat.id);
+        var p1=t.max>0?Math.round(t.t1/t.max*100):0;
+        var p2=t.max>0?Math.round(t.t2/t.max*100):0;
+        if (p1>p2) wins1++; if (p2>p1) wins2++;
+        var diff=Math.abs(p1-p2);
+        if ((t.t1>0||t.t2>0)&&diff>strongestDiff){strongestDiff=diff;strongestAdv={title:cat.title,p1:p1,p2:p2};}
+        if ((t.t1>0||t.t2>0)&&diff<closestDiff){closestDiff=diff;closestContest={title:cat.title,p1:p1,p2:p2};}
+      });
+
+      var winnerName=g1>=g2?n1:n2;
+      var winnerWins=g1>=g2?wins1:wins2;
+      var headline=g1===g2
+        ?esc(n1)+' and '+esc(n2)+' are tied.'
+        :esc(winnerName)+' leads in '+winnerWins+' of '+CATEGORIES.length+' categories.';
+
+      var scoresHtml=
+        '<div class="decision-scores">'+
+          '<div class="decision-score-cell">'+
+            '<div class="decision-score-name">'+esc(n1)+'</div>'+
+            '<div class="decision-score-value '+(g1>=g2?'winner':'loser')+'">'+pct1+'%</div>'+
+            '<div class="decision-score-sub">'+g1+' / '+gMax+' pts</div>'+
+          '</div>'+
+          '<div class="decision-score-cell">'+
+            '<div class="decision-score-name">'+esc(n2)+'</div>'+
+            '<div class="decision-score-value '+(g2>g1?'winner':'loser')+'">'+pct2+'%</div>'+
+            '<div class="decision-score-sub">'+g2+' / '+gMax+' pts</div>'+
+          '</div>'+
+        '</div>';
+
+      var detailParts=[];
+      if (strongestAdv&&strongestDiff>0){
+        var advWinner=strongestAdv.p1>=strongestAdv.p2?n1:n2;
+        var advLoser=strongestAdv.p1>=strongestAdv.p2?n2:n1;
+        detailParts.push('<strong>Strongest advantage:</strong> '+esc(strongestAdv.title)+' \u2014 '+esc(advWinner)+' '+Math.max(strongestAdv.p1,strongestAdv.p2)+'% vs. '+esc(advLoser)+' '+Math.min(strongestAdv.p1,strongestAdv.p2)+'%');
+      }
+      if (closestContest&&closestDiff<strongestDiff){
+        detailParts.push('<strong>Closest contest:</strong> '+esc(closestContest.title)+' \u2014 '+esc(n1)+' '+closestContest.p1+'% vs. '+esc(n2)+' '+closestContest.p2+'%');
+      }
+
+      body.innerHTML=
+        '<div class="decision-headline">'+headline+'</div>'+
+        scoresHtml+
+        (detailParts.length?'<div class="decision-detail">'+detailParts.join('<br>')+'</div>':'');
+    }
+
+    function buildChecklist() {
+      var container = document.getElementById('checklist-container');
+      container.innerHTML = CATEGORIES.map(function(cat){
+        var items = cat.items.map(function(item, idx){
+          var cols = [0,1].map(function(v){
+            var vname = v===0?v1Name():v2Name();
+            return '<div class="score-col">'+
+              '<div class="score-col-label '+(v===0?'v1':'v2')+'">'+esc(vname)+'</div>'+
+              '<div class="score-btns">'+
+                [0,1,2].map(function(val){
+                  return '<button class="score-btn" id="btn-'+cat.id+'-'+idx+'-'+v+'-'+val+'" '+
+                    'onclick="setScore(\''+cat.id+'\','+idx+','+v+','+val+')" '+
+                    'title="'+['Not met','Partially met','Fully met'][val]+'">'+val+'</button>';
+                }).join('')+
+              '</div>'+
+            '</div>';
+          }).join('');
+          return '<div class="checklist-item">'+
+            '<div><div class="item-text">'+esc(item.text)+'</div>'+
+            '<div class="item-hint">'+esc(item.hint)+'</div></div>'+
+            cols+
+          '</div>';
+        }).join('');
+        var bars = [0,1].map(function(v){
+          return '<div class="cat-bar-cell">'+
+            '<div class="cat-bar-track"><div class="cat-bar-fill'+(v===1?' v2':'')+'" id="catbar-'+cat.id+'-'+v+'" style="width:0%"></div></div>'+
+            '<div class="cat-bar-pct" id="catpct-'+cat.id+'-'+v+'">0%</div>'+
+          '</div>';
+        }).join('');
+        return '<div class="category-block" id="cat-'+cat.id+'">'+
+          '<div class="category-header" onclick="toggleCat(\''+cat.id+'\')">'+
+            '<span class="category-title">'+esc(cat.title)+'</span>'+
+            '<span class="category-persona">'+esc(cat.persona)+'</span>'+
+            '<span class="cat-score" id="catscore-'+cat.id+'"><span class="v1">0</span><span class="sep">/</span><span class="v2">0</span></span>'+
+            '<span class="category-toggle">&#9660;</span>'+
+          '</div>'+
+          '<div class="category-items">'+items+'</div>'+
+          '<div class="cat-bar-row" style="background:var(--border);gap:1px;">'+bars+'</div>'+
+        '</div>';
+      }).join('');
+      updateGaps(); updateDecision();
+    }
+
+    function toggleCat(id) { var el=document.getElementById('cat-'+id); if(el) el.classList.toggle('collapsed'); }
+    function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function openModal()  { document.getElementById('modal-overlay').classList.add('open'); }
+    function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+    function handleOverlayClick(e) { if(e.target===document.getElementById('modal-overlay'))closeModal(); }
+
+    function submitEmail() {
+      var email=document.getElementById('modal-email').value.trim();
+      var confirmEl=document.getElementById('modal-confirm');
+      if (!email||!email.includes('@')){ document.getElementById('modal-email').focus(); return; }
+      var btn=document.querySelector('#modal-form button');
+      btn.disabled=true; btn.textContent='Sending...';
+      fetch('https://newsletter.industrialiotsoftware.com',{
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email:email,group_id:'189858333791880417'})
+      })
+      .then(function(r){return r.json();})
+      .then(function(data){
+        if (data.message==='Subscribed'){
+          document.getElementById('modal-form').style.display='none';
+          confirmEl.style.display='block';
+          confirmEl.textContent='You\u2019re subscribed. Your PDF is opening now.';
+          closeModal(); generatePDF();
+        } else {
+          confirmEl.style.display='block';
+          confirmEl.textContent='Something went wrong. Please try again.';
+          btn.disabled=false; btn.textContent='Get PDF';
+        }
+      })
+      .catch(function(){
+        confirmEl.style.display='block';
+        confirmEl.textContent='Could not connect. Please try again.';
+        btn.disabled=false; btn.textContent='Get PDF';
+      });
+    }
+
+    function generatePDF() {
+      var script=document.createElement('script');
+      script.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+      script.onload=function(){
+        var doc=new window.jspdf.jsPDF({unit:'pt',format:'letter'});
+        var margin=48, pageW=612, col=pageW-margin*2, y=margin;
+
+        // Header band
+        doc.setFillColor(10,126,106);
+        doc.rect(0,0,pageW,60,'F');
+        doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(255,255,255);
+        doc.text('INDUSTRIAL IOT SOFTWARE',margin,26);
+        doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(180,230,220);
+        doc.text('An independent guide for industrial IoT software buyers',margin,42);
+        doc.text('industrialiotsoftware.com',pageW-margin,42,{align:'right'});
+
+        y=92;
+        doc.setFont('helvetica','bold'); doc.setFontSize(20); doc.setTextColor(30,30,28);
+        doc.text('IIoT Platform Evaluation Scorecard',margin,y);
+        y+=28;
+        doc.setFont('helvetica','normal'); doc.setFontSize(11); doc.setTextColor(100,100,96);
+        doc.text('Generated '+new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),margin,y);
+        y+=36;
+        doc.setDrawColor(220,220,216); doc.setLineWidth(0.5); doc.line(margin,y,pageW-margin,y); y+=24;
+
+        // Overall scores
+        var g1=0,g2=0,gMax=0;
+        CATEGORIES.forEach(function(cat){var t=catTotals(cat.id);g1+=t.t1;g2+=t.t2;gMax+=t.max;});
+        var pct1=gMax>0?Math.round(g1/gMax*100):0;
+        var pct2=gMax>0?Math.round(g2/gMax*100):0;
+        var n1=v1Name(),n2=v2Name();
+
+        doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(140,140,136);
+        doc.text('OVERALL SCORES',margin,y); y+=16;
+
+        // Two score cells side by side — fixed layout
+        var halfCol=(col-8)/2;
+        [0,1].forEach(function(v){
+          var x=margin+v*(halfCol+8);
+          var name=v===0?n1:n2;
+          var pct=v===0?pct1:pct2;
+          var pts=v===0?g1:g2;
+          var isWinner=v===0?g1>=g2:g2>g1;
+          doc.setFillColor(isWinner?240:248,isWinner?248:248,isWinner?246:248);
+          doc.rect(x,y-14,halfCol,40,'F');
+          // Vendor name
+          doc.setFont('helvetica','bold'); doc.setFontSize(9);
+          doc.setTextColor(isWinner?10:100,isWinner?126:100,isWinner?106:96);
+          var displayName=name.length>24?name.substring(0,24)+'...':name;
+          doc.text(displayName,x+8,y);
+          // Score on next line
+          doc.setFontSize(18);
+          doc.setTextColor(isWinner?10:120,isWinner?126:120,isWinner?106:116);
+          doc.text(pct+'%',x+8,y+18);
+          // Pts inline after score — offset right of the percentage
+          doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(160,160,156);
+          doc.text(pts+' / '+gMax+' pts',x+8+52,y+18);
+        });
+        y+=48;
+
+        doc.setDrawColor(220,220,216); doc.line(margin,y,pageW-margin,y); y+=24;
+
+        // Category breakdown
+        doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(140,140,136);
+        doc.text('CATEGORY BREAKDOWN',margin,y); y+=16;
+
+        // Header row
+        doc.setFillColor(235,235,233);
+        doc.rect(margin,y-12,col,18,'F');
+        doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(100,100,96);
+        doc.text('CATEGORY',margin+8,y-1);
+        var nameCol1=n1.length>14?n1.substring(0,14)+'...':n1;
+        var nameCol2=n2.length>14?n2.substring(0,14)+'...':n2;
+        doc.text(nameCol1,pageW-margin-90,y-1,{align:'right'});
+        doc.text(nameCol2,pageW-margin-10,y-1,{align:'right'});
+        y+=18;
+
+        CATEGORIES.forEach(function(cat){
+          var t=catTotals(cat.id);
+          var p1=t.max>0?Math.round(t.t1/t.max*100):0;
+          var p2=t.max>0?Math.round(t.t2/t.max*100):0;
+          var anyScored=t.t1>0||t.t2>0;
+          doc.setFillColor(248,248,248);
+          doc.rect(margin,y-12,col,20,'F');
+          doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(60,60,58);
+          doc.text(cat.title,margin+8,y);
+          // V1 score — winner green, loser red, unscored mid
+          var v1Winner=anyScored&&p1>=p2;
+          var v1Loser=anyScored&&p1<p2;
+          doc.setFont('helvetica','bold'); doc.setFontSize(9);
+          if (!anyScored) doc.setTextColor(160,160,156);
+          else if (v1Winner) doc.setTextColor(10,126,106);
+          else doc.setTextColor(153,27,27);
+          doc.text(p1+'%',pageW-margin-90,y,{align:'right'});
+          // V2 score
+          if (!anyScored) doc.setTextColor(160,160,156);
+          else if (!v1Winner) doc.setTextColor(10,126,106);
+          else doc.setTextColor(153,27,27);
+          doc.text(p2+'%',pageW-margin-10,y,{align:'right'});
+          y+=22;
+        });
+
+        y+=12;
+        doc.setDrawColor(220,220,216); doc.line(margin,y,pageW-margin,y); y+=24;
+
+        // Decision summary — dark band
+        doc.setFillColor(42,42,40);
+        doc.rect(margin,y-14,col,18,'F');
+        doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(120,120,116);
+        doc.text('DECISION SUMMARY',margin+8,y-2);
+        y+=16;
+
+        var wins1=0,wins2=0,strongestAdv=null,strongestDiff=0,closestContest=null,closestDiff=999;
+        CATEGORIES.forEach(function(cat){
+          var t=catTotals(cat.id);
+          var p1=t.max>0?Math.round(t.t1/t.max*100):0;
+          var p2=t.max>0?Math.round(t.t2/t.max*100):0;
+          if(p1>p2)wins1++;if(p2>p1)wins2++;
+          var diff=Math.abs(p1-p2);
+          if((t.t1>0||t.t2>0)&&diff>strongestDiff){strongestDiff=diff;strongestAdv={title:cat.title,p1:p1,p2:p2};}
+          if((t.t1>0||t.t2>0)&&diff<closestDiff){closestDiff=diff;closestContest={title:cat.title,p1:p1,p2:p2};}
+        });
+
+        var winnerName=g1>=g2?n1:n2;
+        var loserName=g1>=g2?n2:n1;
+        var winnerPct=g1>=g2?pct1:pct2;
+        var loserPct=g1>=g2?pct2:pct1;
+        var winnerWins=g1>=g2?wins1:wins2;
+        var headline=g1===g2?n1+' and '+n2+' are tied.':winnerName+' leads in '+winnerWins+' of '+CATEGORIES.length+' categories.';
+
+        doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(30,30,28);
+        var headLines=doc.splitTextToSize(headline,col);
+        doc.text(headLines,margin,y); y+=headLines.length*16+12;
+
+        // Score cells in PDF decision summary
+        [0,1].forEach(function(v){
+          var x=margin+v*(halfCol+8);
+          var name=v===0?n1:n2;
+          var pct=v===0?pct1:pct2;
+          var pts=v===0?g1:g2;
+          var isWinner=v===0?g1>=g2:g2>g1;
+          doc.setFillColor(isWinner?240:248,isWinner?248:248,isWinner?246:248);
+          doc.rect(x,y-14,halfCol,36,'F');
+          doc.setFont('helvetica','bold'); doc.setFontSize(8);
+          doc.setTextColor(100,100,96);
+          var dn=name.length>22?name.substring(0,22)+'...':name;
+          doc.text(dn,x+8,y-2);
+          doc.setFontSize(16);
+          doc.setTextColor(isWinner?10:120,isWinner?126:120,isWinner?106:116);
+          doc.text(pct+'%',x+8,y+14);
+          doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(160,160,156);
+          doc.text(pts+' / '+gMax+' pts',x+8+46,y+14);
+        });
+        y+=48;
+
+        if (strongestAdv&&strongestDiff>0){
+          var advWinner=strongestAdv.p1>=strongestAdv.p2?n1:n2;
+          var advLoser=strongestAdv.p1>=strongestAdv.p2?n2:n1;
+          doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(40,40,38);
+          doc.text('Strongest advantage',margin,y); y+=14;
+          doc.setFont('helvetica','normal'); doc.setTextColor(80,80,76);
+          doc.text(strongestAdv.title,margin,y); y+=13;
+          doc.text(advWinner+' '+Math.max(strongestAdv.p1,strongestAdv.p2)+'% vs. '+advLoser+' '+Math.min(strongestAdv.p1,strongestAdv.p2)+'%',margin,y); y+=20;
+        }
+        if (closestContest&&closestDiff<strongestDiff){
+          doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(40,40,38);
+          doc.text('Closest contest',margin,y); y+=14;
+          doc.setFont('helvetica','normal'); doc.setTextColor(80,80,76);
+          doc.text(closestContest.title,margin,y); y+=13;
+          doc.text(n1+' '+closestContest.p1+'% vs. '+n2+' '+closestContest.p2+'%',margin,y);
+        }
+
+        // Footer
+        doc.setDrawColor(10,126,106); doc.setLineWidth(1); doc.line(margin,752,pageW-margin,752);
+        doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(140,140,136);
+        doc.text('Industrial IoT Software is published by Machines & Words. industrialiotsoftware.com',margin,768);
+        doc.text('Generated by the IIoT Platform Evaluation Checklist.',margin,780);
+
+        var pdfBlob=doc.output('blob');
+        window.open(URL.createObjectURL(pdfBlob),'_blank');
+      };
+      document.head.appendChild(script);
+    }
+
+    buildChecklist();
+    updateTotals();
+  </script>
+
+  <script src="/nav.js"></script>
+
+</body>
+</html>

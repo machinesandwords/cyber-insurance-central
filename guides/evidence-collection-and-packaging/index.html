@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evidence Collection and Packaging for Underwriters | Cyber Insurance Central</title>
+<meta name="description" content="Attestation is no longer enough. A vendor-neutral walkthrough of what real evidence looks like for MFA, EDR, backups, and incident response plans.">
+<link rel="canonical" href="https://cyberinsurancecentral.com/guides/evidence-collection-and-packaging/">
+<meta property="og:title" content="Evidence Collection and Packaging for Underwriters — Cyber Insurance Central">
+<meta property="og:description" content="A vendor-neutral walkthrough of what real evidence looks like for MFA, EDR, backups, and incident response.">
+<meta property="og:url" content="https://cyberinsurancecentral.com/guides/evidence-collection-and-packaging/">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://cyberinsurancecentral.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cyberinsurancecentral.com/og-image.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<script src="/config.js"></script>
+</head>
+<body>
+<div class="layout">
+  <div class="main">
+    <div class="content">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="/guides/">Guides</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>Evidence Collection and Packaging</span>
+      </div>
+
+      <span class="page-label">Guide — Underwriting &amp; Controls</span>
+      <h1>Evidence Collection and Packaging for Underwriters</h1>
+
+      <p>
+        Attestation used to be enough. A buyer would check a box confirming
+        MFA was in place, and the questionnaire moved on. That's no longer how
+        underwriting works. Carriers increasingly ask for proof, not just a
+        checked box. The gap between what gets attested and what's actually
+        true is exactly what the failure-to-maintain exclusion is written to
+        catch. That exclusion is covered in more detail on the
+        <a href="/landscape/coverage-components/">coverage components
+        page</a>.
+      </p>
+
+      <p>
+        Building that evidence package is squarely the CISO's job, per the
+        buying-committee roles covered in
+        <a href="/guides/who-should-be-in-the-room/">who should be in the
+        room</a>, not a task to hand to whichever security vendor is trying to
+        sell you a platform. This guide is a vendor-neutral walk-through of how
+        to build the evidence package yourself, using controls you likely
+        already have deployed.
+      </p>
+
+      <h2 id="why-it-fails">Why a scattered evidence trail fails you</h2>
+
+      <p>
+        The risk of weak evidence isn't just a slower application or a
+        slightly higher premium. It's a claim that gets denied entirely.
+      </p>
+
+      <p>
+        When a claim comes in, the carrier's investigation doesn't just look
+        at whether an attack happened, it looks at whether the controls
+        represented on the original application were actually in place, in
+        the way they were described, at the time of the incident. If MFA was
+        represented as enforced organization-wide but a legacy system was
+        quietly excluded, or backups were represented as tested but the last
+        actual restoration test predates the policy by two years, that gap is
+        precisely what a failure-to-maintain exclusion is written to catch.
+        The claim doesn't just get scrutinized more closely. It can be voided
+        outright.
+      </p>
+
+      <p>
+        An organization with a scattered evidence trail, screenshots buried in
+        old emails, configuration exports nobody archived, a backup test that
+        happened once and was never repeated, isn't necessarily lying on the
+        application. It's simply unable to prove, months or years later, that
+        what was true at the time of underwriting is still true, or was ever
+        fully true to begin with. A real evidence package solves that problem
+        before it becomes one.
+      </p>
+
+      <h2 id="what-it-contains">What a reliable evidence package contains</h2>
+
+      <p>
+        The specifics vary by carrier, but the core categories carriers ask
+        about consistently are MFA, endpoint detection and response, backups,
+        and incident response planning. For each, evidence means something
+        more specific than a policy document stating the control exists.
+      </p>
+
+      <p>
+        For MFA, evidence typically means a screenshot or export of the actual
+        identity provider configuration showing MFA enforcement, not just
+        availability, applied across all users and, critically, all
+        privileged accounts. The distinction between MFA being available and
+        MFA being enforced is one of the most common gaps between what gets
+        attested and what's actually true, since a setting that can be
+        enabled but isn't mandatory for every account doesn't protect the
+        organization the way a carrier assumes it does.
+      </p>
+
+      <p>
+        For endpoint detection and response, evidence means a coverage report
+        showing what percentage of devices actually have an active agent
+        installed and reporting, not just a statement that an EDR platform is
+        licensed. A platform deployed to 60 percent of endpoints is a
+        materially different risk than one deployed to 100 percent, and the
+        coverage percentage itself is often the specific figure an underwriter
+        wants.
+      </p>
+
+      <p>
+        For backups, evidence means documentation that backups are both
+        offline or immutable, so they can't be encrypted or deleted alongside
+        production data, and actually tested through a real restoration, not
+        just scheduled. A record of when the last restoration test occurred,
+        and what was restored, is the artifact that turns "we have backups"
+        into something a carrier can actually credit.
+      </p>
+
+      <p>
+        For incident response, evidence means a written plan, current rather
+        than years old, along with documentation that it's been rehearsed,
+        typically through a tabletop exercise, with a date attached. A plan
+        that exists as a document but has never been walked through with the
+        people who'd actually execute it is weaker evidence than carriers
+        increasingly expect.
+      </p>
+
+      <h2 id="build-before-you-need-it">Build it before you need it</h2>
+
+      <p>
+        The evidence package described above shouldn't get assembled for the
+        first time during renewal week, under deadline pressure, with
+        whoever's available pulling screenshots from memory. It should exist
+        as a living reference, updated as controls change, so that renewal
+        becomes a matter of confirming the package is current rather than
+        building it from scratch.
+      </p>
+
+      <p>
+        This matters beyond speed. An evidence library maintained year-round
+        is also the mechanism that catches drift, such as a control that was
+        accurately represented at last renewal but has since lapsed, before a
+        carrier or a claims investigator catches it instead.
+      </p>
+
+      <h2 id="where-this-leaves-a-buyer">Where this leaves a buyer</h2>
+
+      <p>
+        The organizations getting the best underwriting outcomes aren't
+        necessarily the ones with the most sophisticated security stack.
+        They're the ones who can prove, specifically and currently, that
+        what's deployed is actually working the way it was represented.
+        Building that proof once, and keeping it current, is a smaller task
+        than most security teams assume, and a considerably smaller one than
+        rebuilding trust with a carrier after a claim gets questioned.
+      </p>
+
+      <div class="callout">
+        <span class="callout-label">Related Guides</span>
+        <p>
+          <a href="/guides/renewal-leverage/">What Changes at Renewal</a>
+          &middot;
+          <a href="/guides/incident-response-panel/">The Incident Response
+          Panel</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p>&copy; 2026 Cyber Insurance Central. Part of the Machines &amp; Words network.</p>
+  </div>
+</footer>
+
+<script src="/nav.js"></script>
+<script src="/newsletter.js"></script>
+</body>
+</html>

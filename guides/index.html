@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Insurance Guides — Practical, Vendor-Neutral Advice | Cyber Insurance Central</title>
+<meta name="description" content="Practical guides on buying, comparing, evidencing, renewing, and claiming cyber insurance, organized by buyer stage and role.">
+<link rel="canonical" href="https://cyberinsurancecentral.com/guides/">
+<meta property="og:title" content="Guides — Cyber Insurance Central">
+<meta property="og:description" content="Practical, vendor-neutral cyber insurance guides organized by buyer stage and role.">
+<meta property="og:url" content="https://cyberinsurancecentral.com/guides/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://cyberinsurancecentral.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cyberinsurancecentral.com/og-image.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<script src="/config.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/7.0.0/fuse.min.js"></script>
+<style>
+  .guides-search {
+    width: 100%;
+    font-family: 'Space Mono', monospace;
+    font-size: var(--body);
+    padding: 10px 14px;
+    border: var(--hairline);
+    background: var(--surface);
+    color: var(--charcoal);
+    outline: none;
+    margin-bottom: 20px;
+  }
+  .guides-search:focus { border-color: var(--accent); }
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .filter-row-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--faint);
+    width: 100%;
+    margin-bottom: 4px;
+  }
+  .filter-chip {
+    font-family: 'Space Mono', monospace;
+    font-size: var(--small);
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--mid);
+    cursor: pointer;
+  }
+  .filter-chip:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-chip.active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: white;
+  }
+  .guides-list { margin-top: 32px; }
+  .guide-card {
+    border: var(--hairline);
+    border-top: none;
+    padding: 18px 20px;
+  }
+  .guides-list .guide-card:first-child { border-top: var(--hairline); }
+  .guide-card-title { font-size: var(--h3); font-weight: 700; margin-bottom: 6px; }
+  .guide-card-title a { color: var(--charcoal); }
+  .guide-card-title a:hover { color: var(--accent); }
+  .guide-card-summary { font-size: var(--small); color: var(--mid); margin-bottom: 0; }
+  .guides-empty { padding: 24px 0; color: var(--mid); font-size: var(--small); }
+</style>
+</head>
+<body>
+<div class="layout">
+  <div class="main">
+    <div class="content">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>Guides</span>
+      </div>
+
+      <span class="page-label">Guides</span>
+      <h1>Guides</h1>
+      <p class="lead">
+        Practical, vendor-neutral guides organized by where you are in the
+        buying and renewal cycle. Filter by category or role, or search
+        directly.
+      </p>
+
+      <input type="text" id="guides-search" class="guides-search" placeholder="Search guides&hellip;">
+
+      <div class="filter-row" id="category-filters">
+        <div class="filter-row-label">Category</div>
+      </div>
+      <div class="filter-row" id="role-filters">
+        <div class="filter-row-label">Role</div>
+      </div>
+
+      <div id="guides-list" class="guides-list">
+        <p class="guides-empty">Loading guides&hellip;</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p>&copy; 2026 Cyber Insurance Central. Part of the Machines &amp; Words network.</p>
+  </div>
+</footer>
+
+<script src="/nav.js"></script>
+<script src="/newsletter.js"></script>
+<script>
+(function () {
+  const CATEGORY_LABELS = {
+    "getting-ready-to-buy": "Getting Ready to Buy",
+    "evaluating-carriers": "Evaluating Carriers & Quotes",
+    "underwriting-controls": "Underwriting & Controls",
+    "renewal-management": "Renewal & Ongoing Management",
+    "claims-incidents": "Claims & Incidents"
+  };
+  const ROLE_LABELS = {
+    "ciso": "CISO",
+    "cfo-risk": "CFO / Risk",
+    "general-counsel": "General Counsel",
+    "all": "All Roles"
+  };
+
+  let allGuides = [];
+  let fuse = null;
+  let activeCategory = null;
+  let activeRole = null;
+  let searchQuery = '';
+
+  function render() {
+    let results = allGuides;
+
+    if (searchQuery.trim() && fuse) {
+      results = fuse.search(searchQuery.trim()).map(function (r) { return r.item; });
+    }
+    if (activeCategory) {
+      results = results.filter(function (g) { return g.category === activeCategory; });
+    }
+    if (activeRole) {
+      results = results.filter(function (g) { return g.roles.indexOf(activeRole) !== -1; });
+    }
+
+    const container = document.getElementById('guides-list');
+    if (results.length === 0) {
+      container.innerHTML = '<p class="guides-empty">No guides match those filters yet. More are published weekly.</p>';
+      return;
+    }
+
+    container.innerHTML = results.map(function (g) {
+      return (
+        '<div class="guide-card">' +
+          '<div class="guide-card-title"><a href="' + g.url + '">' + g.title + '</a></div>' +
+          '<p class="guide-card-summary">' + g.summary + '</p>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function buildFilterChips(containerId, labelMap, activeGetterKey) {
+    const container = document.getElementById(containerId);
+    Object.keys(labelMap).forEach(function (key) {
+      const chip = document.createElement('div');
+      chip.className = 'filter-chip';
+      chip.textContent = labelMap[key];
+      chip.dataset.value = key;
+      chip.addEventListener('click', function () {
+        const isRoleRow = containerId === 'role-filters';
+        if (isRoleRow) {
+          activeRole = (activeRole === key) ? null : key;
+        } else {
+          activeCategory = (activeCategory === key) ? null : key;
+        }
+        Array.from(container.querySelectorAll('.filter-chip')).forEach(function (c) {
+          c.classList.remove('active');
+        });
+        if ((isRoleRow && activeRole === key) || (!isRoleRow && activeCategory === key)) {
+          chip.classList.add('active');
+        }
+        render();
+      });
+      container.appendChild(chip);
+    });
+  }
+
+  fetch('/guides.json')
+    .then(function (res) { return res.json(); })
+    .then(function (guides) {
+      allGuides = guides;
+      fuse = new Fuse(allGuides, {
+        keys: ['title', 'summary', 'category'],
+        threshold: 0.35
+      });
+      buildFilterChips('category-filters', CATEGORY_LABELS, 'activeCategory');
+      buildFilterChips('role-filters', ROLE_LABELS, 'activeRole');
+      render();
+    })
+    .catch(function () {
+      document.getElementById('guides-list').innerHTML =
+        '<p class="guides-empty">Guides temporarily unavailable.</p>';
+    });
+
+  document.getElementById('guides-search').addEventListener('input', function (e) {
+    searchQuery = e.target.value;
+    render();
+  });
+})();
+</script>
+</body>
+</html>

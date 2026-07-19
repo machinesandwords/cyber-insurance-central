@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f4f4f3"/>
+  <rect x="1" y="1" width="1198" height="628" fill="none" stroke="#d8d8d6" stroke-width="2"/>
+
+  <!-- top hairline bar, echoes site topbar -->
+  <rect x="0" y="0" width="1200" height="88" fill="#ffffff"/>
+  <rect x="0" y="87" width="1200" height="1" fill="#d8d8d6"/>
+  <text x="64" y="55" font-family="Space Mono" font-size="22" font-weight="700"
+        letter-spacing="1.5" fill="#2a2a28">CYBER INSURANCE <tspan fill="#8A6A1E">CENTRAL</tspan></text>
+
+  <!-- accent pipe + label, echoes nav-section-label style -->
+  <rect x="64" y="192" width="4" height="20" fill="#8A6A1E"/>
+  <text x="84" y="208" font-family="Space Mono" font-size="14" font-weight="700"
+        letter-spacing="2" fill="#6b6b68">INDEPENDENT COVERAGE ANALYSIS</text>
+
+  <!-- headline -->
+  <text x="64" y="280" font-family="Space Mono" font-size="46" font-weight="700" fill="#2a2a28">Cyber insurance, read</text>
+  <text x="64" y="336" font-family="Space Mono" font-size="46" font-weight="700" fill="#2a2a28">through the lens of</text>
+  <text x="64" y="392" font-family="Space Mono" font-size="46" font-weight="700" fill="#8A6A1E">security posture.</text>
+
+  <!-- lead line, echoes .lead accent-bordered style -->
+  <rect x="64" y="440" width="3" height="72" fill="#8A6A1E"/>
+  <text x="88" y="462" font-family="Space Mono" font-size="16" fill="#6b6b68">Carrier requirements, coverage comparisons, and</text>
+  <text x="88" y="486" font-family="Space Mono" font-size="16" fill="#6b6b68">underwriting insight for cyber insurance buyers.</text>
+
+  <!-- footer domain, echoes footer style -->
+  <rect x="0" y="582" width="1200" height="1" fill="#d8d8d6"/>
+  <text x="64" y="614" font-family="Space Mono" font-size="14" fill="#9b9b98">cyberinsurancecentral.com</text>
+</svg>

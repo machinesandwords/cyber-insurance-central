@@ -1,0 +1,112 @@
+[
+  {
+    "id": "chubb",
+    "name": "Chubb",
+    "url": "https://www.chubb.com",
+    "type": "carrier",
+    "tier": "established",
+    "segment_fit": ["enterprise", "complex-accounts", "multinational"],
+    "description": "The largest publicly traded property and casualty insurer globally, and the top-ranked stand-alone cyber writer in the US by direct premium as of 2025. Operates in 54 countries with 24/7 breach response infrastructure and in-house forensic and legal specialists. Cyber book spans standalone and packaged coverage.",
+    "best_fit": "Large and multinational organizations that need broad capacity, established claims history, and industry-specific underwriting across sectors including healthcare and manufacturing.",
+    "watch": null
+  },
+  {
+    "id": "beazley",
+    "name": "Beazley",
+    "url": "https://www.beazley.com",
+    "type": "carrier",
+    "tier": "established",
+    "segment_fit": ["enterprise", "complex-accounts"],
+    "description": "Jumped from 10th to 2nd place in US stand-alone cyber rankings in 2025, the sharpest single-year climb among major carriers. Launched Beazley Security in 2024, merging its in-house cyber team with a wholly owned cybersecurity firm to position itself as a full cyber resilience partner rather than indemnification only.",
+    "best_fit": "Enterprise and complex accounts, particularly buyers who value integrated security services alongside the policy itself.",
+    "watch": "Zurich Insurance Group's £8.1bn (~$10.8bn) acquisition of Beazley, agreed March 2026, is advanced but not yet closed as of this writing. Beazley shareholders approved the deal in April 2026 (99.9% in favor); Australian and EU competition regulators have both cleared it (June and July 2026 respectively). Remaining steps: UK Prudential Regulation Authority approval (the most consequential outstanding hurdle) and UK court sanction of the scheme of arrangement. Completion still expected second half of 2026. Update this entry once the deal closes."
+  },
+  {
+    "id": "travelers",
+    "name": "Travelers",
+    "url": "https://www.travelers.com",
+    "type": "carrier",
+    "tier": "established",
+    "segment_fit": ["enterprise", "mid-market"],
+    "description": "Consistently ranked among the top three US stand-alone cyber writers. Provides underlying capacity for Corvus, an MGA it acquired, extending its reach into tech-driven underwriting without building that platform internally.",
+    "best_fit": "Mid-market to large accounts, including through the Corvus MGA relationship for buyers who want tech-driven underwriting backed by traditional carrier capacity.",
+    "watch": null
+  },
+  {
+    "id": "at-bay",
+    "name": "At-Bay",
+    "url": "https://www.at-bay.com",
+    "type": "carrier-and-mga",
+    "tier": "challenger",
+    "segment_fit": ["technology", "mid-market", "documented-security-maturity"],
+    "description": "One of the fastest-growing cyber writers in the US, with direct premiums up over 340 percent year over year as of the most recent ranking period. At-Bay operates two distinct legal entities: At-Bay Insurance Services LLC, a licensed insurance agency and surplus lines broker that places coverage through non-admitted insurers, and At-Bay Specialty Insurance Company, a Delaware-domiciled excess and surplus lines carrier licensed in 44 states, which At-Bay acquired from XL Insurance America in January 2023. The acquisition gave At-Bay its own risk-bearing capacity in addition to its original distribution business, a vertical integration path worth watching as other insurtechs mature.",
+    "best_fit": "Organizations that can document security sophistication in detail. At-Bay's underwriting rewards specific, evidenced controls, including MDR platforms, more than a generic questionnaire response would.",
+    "watch": null
+  },
+  {
+    "id": "coalition",
+    "name": "Coalition",
+    "url": "https://www.coalitioninc.com",
+    "type": "mga",
+    "tier": "challenger",
+    "segment_fit": ["technology", "smb", "professional-services"],
+    "description": "Largest cyber insurer by policy count among the tech-driven entrants. Pioneered the model of bundling active security monitoring, included security tools, and pre-claim incident response with the policy itself, rather than treating insurance as indemnification only.",
+    "best_fit": "Technology companies, professional services firms, and SMBs that benefit from an insurer that actively monitors security posture rather than underwriting once a year and disappearing until a claim.",
+    "watch": null
+  },
+  {
+    "id": "cowbell",
+    "name": "Cowbell",
+    "url": "https://cowbell.insure",
+    "type": "mga",
+    "tier": "challenger",
+    "segment_fit": ["smb"],
+    "description": "Built specifically for small and midsize businesses, an underserved segment relative to the enterprise focus of most traditional carriers.",
+    "best_fit": "SMBs that need cyber coverage sized and priced for their scale, rather than a scaled-down enterprise product.",
+    "watch": null
+  },
+  {
+    "id": "resilience",
+    "name": "Resilience",
+    "url": "https://www.resilienceinsurance.com",
+    "type": "mga",
+    "tier": "challenger",
+    "segment_fit": ["mid-market", "lower-enterprise"],
+    "description": "Positioned between SMB-focused tech insurers and large-enterprise traditional carriers, filling a segment gap for mid-market and lower-enterprise buyers who want tech-driven underwriting at a scale below Coalition or At-Bay's typical accounts.",
+    "best_fit": "Mid-market and lower-enterprise organizations that have outgrown SMB-focused insurtechs but aren't yet the scale traditional carriers prioritize.",
+    "watch": null
+  },
+  {
+    "id": "corvus",
+    "name": "Corvus",
+    "url": "https://www.corvusinsurance.com",
+    "type": "mga",
+    "tier": "challenger",
+    "segment_fit": ["mid-market", "enterprise"],
+    "description": "Tech-driven MGA now backed by Travelers' capacity following Travelers' acquisition of the company, giving it the ability to handle larger and more complex accounts without the balance sheet constraints that affect standalone MGAs.",
+    "best_fit": "Accounts in the mid-market to lower-enterprise range where Coalition and Corvus are frequently on the same shortlist; the choice often comes down to industry appetite at a given point in time rather than a structural difference.",
+    "watch": null
+  },
+  {
+    "id": "aig",
+    "name": "AIG",
+    "url": "https://www.aig.com",
+    "type": "carrier",
+    "tier": "established",
+    "segment_fit": ["enterprise", "critical-infrastructure", "multinational"],
+    "description": "Major cyber carrier for large and complex risks, commonly included when brokers build multi-carrier towers for multinationals and critical-infrastructure clients. Has been repositioning as a pure-play property and casualty group following the 2025 divestiture of its life and retirement business.",
+    "best_fit": "Large and multinational organizations, particularly those needing cyber coverage integrated into a broader specialty and financial lines program.",
+    "watch": null
+  },
+  {
+    "id": "tokio-marine",
+    "name": "Tokio Marine",
+    "url": "https://www.tokiomarinehcc.com",
+    "type": "carrier",
+    "tier": "established",
+    "segment_fit": ["enterprise", "international"],
+    "description": "Consistently ranks among the top five US stand-alone cyber writers. Relevant particularly for organizations with international footprints given the group's global presence.",
+    "best_fit": "Enterprises with international operations or ownership structures that benefit from a carrier with established global claims infrastructure.",
+    "watch": null
+  }
+]

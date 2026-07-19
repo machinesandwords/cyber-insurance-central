@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Insurance Carriers &amp; MGAs — Independent Index | Cyber Insurance Central</title>
+<meta name="description" content="An independent, unranked index of active cyber insurance carriers and MGAs, including segment fit and structural notes.">
+<link rel="canonical" href="https://cyberinsurancecentral.com/landscape/carriers/">
+<meta property="og:title" content="Carriers — Cyber Insurance Central">
+<meta property="og:description" content="An independent, unranked index of active cyber insurance carriers and MGAs.">
+<meta property="og:url" content="https://cyberinsurancecentral.com/landscape/carriers/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://cyberinsurancecentral.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cyberinsurancecentral.com/og-image.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<script src="/config.js"></script>
+<style>
+  .carrier-block { border: var(--hairline); padding: 20px 24px; margin-bottom: 1px; background: var(--surface); }
+  .carrier-list { border: var(--hairline); border-bottom: none; margin-bottom: 40px; }
+  .carrier-name { font-size: var(--h2); font-weight: 700; margin-bottom: 8px; }
+  .carrier-watch { margin-top: 12px; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <div class="main">
+    <div class="content">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="/landscape/">Landscape</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>Carriers</span>
+      </div>
+
+      <span class="page-label">Landscape — Unranked Index</span>
+      <h1>Carriers &amp; MGAs</h1>
+      <p class="lead">
+        Active cyber insurance carriers and MGAs, listed without ranking. Fit
+        depends on your segment, exposure, and what you can evidence, not on
+        order of appearance here.
+      </p>
+
+      <div class="section-intro">
+        <p>
+          This index covers structure and segment fit, not pricing or coverage
+          recommendations. See <a href="/landscape/">market structure</a> for how
+          carriers, MGAs, and brokers relate, and <a href="/landscape/underwriting-requirements/">underwriting
+          requirements</a> for what any of these will expect before writing a
+          policy.
+        </p>
+      </div>
+
+      <div id="carrier-list" class="carrier-list">
+        <p style="padding: 20px 24px; color: var(--mid);">Loading carrier index&hellip;</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p>&copy; 2026 Cyber Insurance Central. Part of the Machines &amp; Words network.</p>
+  </div>
+</footer>
+
+<script src="/nav.js"></script>
+<script src="/newsletter.js"></script>
+<script>
+(function () {
+  const TYPE_LABELS = {
+    "carrier": "Carrier",
+    "mga": "MGA",
+    "carrier-and-mga": "Carrier & MGA"
+  };
+
+  fetch('/carriers.json')
+    .then(function (res) { return res.json(); })
+    .then(function (carriers) {
+      const container = document.getElementById('carrier-list');
+      container.innerHTML = carriers.map(function (c) {
+        const typeLabel = TYPE_LABELS[c.type] || c.type;
+        const tierLabel = c.tier === 'established' ? 'Established' : 'Challenger';
+        const segments = (c.segment_fit || []).map(function (s) {
+          return '<span class="tag">' + s.replace(/-/g, ' ') + '</span>';
+        }).join('');
+        const watchHtml = c.watch
+          ? '<div class="callout carrier-watch"><span class="callout-label">Watch</span><p>' + c.watch + '</p></div>'
+          : '';
+        return (
+          '<div class="carrier-block">' +
+            '<div class="carrier-name"><a href="' + c.url + '" target="_blank" rel="noopener">' + c.name + '</a></div>' +
+            '<div class="tags">' +
+              '<span class="tag tag-accent">' + typeLabel + '</span>' +
+              '<span class="tag">' + tierLabel + '</span>' +
+              segments +
+            '</div>' +
+            '<p>' + c.description + '</p>' +
+            '<p><strong>Best fit:</strong> ' + c.best_fit + '</p>' +
+            watchHtml +
+          '</div>'
+        );
+      }).join('');
+    })
+    .catch(function () {
+      document.getElementById('carrier-list').innerHTML =
+        '<p style="padding: 20px 24px; color: var(--mid);">Carrier index temporarily unavailable.</p>';
+    });
+})();
+</script>
+</body>
+</html>
