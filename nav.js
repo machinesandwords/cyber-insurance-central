@@ -15,15 +15,13 @@
       <a href="/landscape/carriers/" class="nav-item depth-1">└ Carriers</a>
     </div>
 
-     <div class="nav-divider"></div>
+    <div class="nav-divider"></div>
 
     <div class="nav-section">
       <div class="nav-section-label">Tools</div>
-      <a href="/tools/evidence-package-builder/" class="nav-item depth-1">├ Evidence package builder</a>
-      <a href="/tools/how-to-compare-cyber-insurance-quotes/" class="nav-item depth-1">├ Evaluating carriers &amp; quotes</a>
-      <a href="/guides/evidence-collection-and-packaging/" class="nav-item depth-1">├ Underwriting &amp; controls</a>
-      <a href="/guides/renewal-leverage/" class="nav-item depth-1">├ Renewal &amp; ongoing management</a>
-      <a href="/guides/incident-response-panel/" class="nav-item depth-1">└ Claims &amp; incidents</a>
+      <a href="/tools/" class="nav-item depth-0">All tools</a>
+      <a href="/tools/evidence-package-builder/" class="nav-item depth-1">├ Evidence Package Builder</a>
+      <a href="/tools/sublimit-visualizer/" class="nav-item depth-1">└ Coverage Gap Visualizer</a>
     </div>
 
     <div class="nav-divider"></div>
@@ -48,7 +46,7 @@
     <div class="nav-divider"></div>
 
     <div class="nav-section">
-      <a href="/#stay-informed" class="nav-item depth-0 nav-subscribe">Stay up to date on changes that impact your business&rarr;</a>
+      <a href="/#stay-informed" class="nav-item depth-0 nav-subscribe">Subscribe &rarr;</a>
     </div>
   `;
 
