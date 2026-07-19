@@ -95,11 +95,53 @@
     color: var(--mid);
   }
 
+  .sv-post-print {
+    display: none;
+    border: 1px solid var(--accent);
+    background: var(--accent-pale);
+    padding: 20px 24px;
+    margin-top: 24px;
+    position: relative;
+  }
+  .sv-post-print-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: var(--mid);
+    cursor: pointer;
+    line-height: 1;
+  }
+  .sv-post-print-close:hover { color: var(--charcoal); }
+  .sv-post-print-form { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .sv-post-print-form input {
+    flex: 1;
+    min-width: 200px;
+    font-family: 'Space Mono', monospace;
+    font-size: var(--small);
+    padding: 8px 12px;
+    border: var(--hairline);
+    background: var(--surface);
+  }
+  .sv-post-print-form button {
+    font-family: 'Space Mono', monospace;
+    font-size: var(--small);
+    font-weight: 700;
+    padding: 8px 16px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  .sv-post-print-form button:disabled { background: var(--border); color: var(--faint); cursor: default; }
+
   .sv-print-header { display: none; }
 
   @media print {
     .topbar, .sidebar, .breadcrumb, .page-label, .lead,
-    .sv-inputs, .sv-actions, footer {
+    .sv-inputs, .sv-actions, .sv-post-print, footer {
       display: none !important;
     }
     .sv-print-header {
@@ -193,6 +235,20 @@
       <div class="sv-actions" style="margin-top: 24px;">
         <button id="sv-print" style="font-family: 'Space Mono', monospace; font-size: var(--small); font-weight: 700; padding: 8px 16px; background: var(--accent); color: white; border: none; cursor: pointer;">Print / Save as PDF</button>
       </div>
+
+      <div class="sv-post-print" id="sv-post-print">
+        <button class="sv-post-print-close" id="sv-post-print-close" aria-label="Dismiss">&times;</button>
+        <span class="page-label" style="margin-bottom:6px;">Stay Informed</span>
+        <p style="font-size: var(--small); color: var(--charcoal); margin-bottom: 0;">
+          Carrier requirements and sublimit patterns shift. Get notified when
+          something changes that affects coverage gaps like these.
+        </p>
+        <form class="sv-post-print-form" id="sv-post-print-form">
+          <input type="email" id="sv-post-print-email" placeholder="you@company.com" required>
+          <button type="submit" id="sv-post-print-submit">Subscribe</button>
+        </form>
+        <div id="sv-post-print-msg" style="font-size: 11px; margin-top: 8px;"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -283,6 +339,62 @@
 
   document.getElementById('sv-print').addEventListener('click', function () {
     window.print();
+  });
+
+  // Soft post-print email prompt. Fires on afterprint (browser dialog closed,
+  // whether they actually printed or canceled) — a reasonable proxy for
+  // "engaged enough to want a copy." Dismissible, and only shown once per
+  // session so it doesn't nag on repeat prints.
+  const WORKER_URL = 'https://newsletter-cyberinsurancecentral.whereismy328.workers.dev/subscribe';
+  const GROUP_ID = '193395108513580215';
+  const DISMISS_KEY = 'sv-post-print-dismissed';
+
+  window.addEventListener('afterprint', function () {
+    if (sessionStorage.getItem(DISMISS_KEY)) return;
+    document.getElementById('sv-post-print').style.display = 'block';
+  });
+
+  document.getElementById('sv-post-print-close').addEventListener('click', function () {
+    document.getElementById('sv-post-print').style.display = 'none';
+    try { sessionStorage.setItem(DISMISS_KEY, 'true'); } catch (e) {}
+  });
+
+  document.getElementById('sv-post-print-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const email = document.getElementById('sv-post-print-email').value.trim();
+    const btn = document.getElementById('sv-post-print-submit');
+    const msg = document.getElementById('sv-post-print-msg');
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      msg.textContent = 'Please enter a valid email address.';
+      msg.style.color = '#991b1b';
+      return;
+    }
+    btn.disabled = true;
+    msg.textContent = 'Subscribing...';
+    msg.style.color = 'var(--faint)';
+
+    fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, group_id: GROUP_ID })
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data.message === 'Subscribed') {
+          msg.textContent = "You're on the list.";
+          msg.style.color = 'var(--accent)';
+          try { sessionStorage.setItem(DISMISS_KEY, 'true'); } catch (e) {}
+        } else {
+          msg.textContent = 'Something went wrong: ' + (data.detail || data.message || 'unknown error') + '.';
+          msg.style.color = '#991b1b';
+          btn.disabled = false;
+        }
+      })
+      .catch(function () {
+        msg.textContent = 'Something went wrong. Try again.';
+        msg.style.color = '#991b1b';
+        btn.disabled = false;
+      });
   });
 })();
 </script>
