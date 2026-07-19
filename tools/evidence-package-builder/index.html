@@ -652,13 +652,19 @@
       body: JSON.stringify({ email: email, group_id: GROUP_ID })
     })
       .then(function (res) { return res.json(); })
-      .then(function () {
-        msg.textContent = 'Summary generated below.';
-        msg.style.color = 'var(--accent)';
-        const output = document.getElementById('epb-summary-output');
-        output.style.display = 'block';
-        output.textContent = buildSummaryText();
-        document.getElementById('epb-summary-actions').style.display = 'flex';
+      .then(function (data) {
+        if (data.message === 'Subscribed') {
+          msg.textContent = 'Summary generated below.';
+          msg.style.color = 'var(--accent)';
+          const output = document.getElementById('epb-summary-output');
+          output.style.display = 'block';
+          output.textContent = buildSummaryText();
+          document.getElementById('epb-summary-actions').style.display = 'flex';
+        } else {
+          msg.textContent = 'Something went wrong: ' + (data.detail || data.message || 'unknown error') + '. Try again.';
+          msg.style.color = '#991b1b';
+          btn.disabled = false;
+        }
       })
       .catch(function () {
         msg.textContent = 'Something went wrong. Try again.';
