@@ -1,255 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Insurability Impact Checker | Cyber Insurance Central</title>
-<meta name="description" content="Answer seven questions about your current controls and see the likely underwriting impact before you apply. Free, instant, no signup.">
-<link rel="canonical" href="https://cyberinsurancecentral.com/tools/insurability-impact-checker/">
-<meta property="og:title" content="Insurability Impact Checker — Cyber Insurance Central">
-<meta property="og:description" content="See the likely underwriting impact of your current controls before you apply.">
-<meta property="og:url" content="https://cyberinsurancecentral.com/tools/insurability-impact-checker/">
-<meta property="og:type" content="website">
-<meta property="og:image" content="https://cyberinsurancecentral.com/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://cyberinsurancecentral.com/og-image.png">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<style>:root{--accent:#8A6A1E;--accent-dim:#6E5518;--accent-pale:#F7F1E3}</style>
-<link rel="stylesheet" href="/styles.css">
-<script src="/config.js" defer></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  .ic-question {
-    border: var(--hairline);
-    background: var(--surface);
-    padding: 20px 24px;
-    margin-bottom: 1px;
-  }
-  .ic-question-text { font-size: var(--small); font-weight: 700; margin-bottom: 12px; }
-  .ic-options { display: flex; gap: 8px; flex-wrap: wrap; }
-  .ic-option {
-    font-family: 'Space Mono', monospace;
-    font-size: var(--small);
-    padding: 6px 16px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--mid);
-    cursor: pointer;
-  }
-  .ic-option:hover { border-color: var(--accent); color: var(--accent); }
-  .ic-option.selected-yes { border-color: #2e7d32; background: #e6f2e8; color: #2e7d32; }
-  .ic-option.selected-partial { border-color: #b45309; background: #fbeee0; color: #b45309; }
-  .ic-option.selected-no { border-color: #991b1b; background: #fbe9e9; color: #991b1b; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
-  .ic-result {
-    display: none;
-    margin-top: 32px;
+  <title>Insurability Impact Checker | Cyber Insurance Central</title>
+  <meta name="description" content="Answer seven questions about your current controls and see the likely underwriting impact before you apply. Free, instant, no signup.">
+  <link rel="canonical" href="https://cyberinsurancecentral.com/tools/insurability-impact-checker/">
+
+  <meta property="og:title" content="Insurability Impact Checker | Cyber Insurance Central">
+  <meta property="og:description" content="See the likely underwriting impact of your current controls before you apply.">
+  <meta property="og:url" content="https://cyberinsurancecentral.com/tools/insurability-impact-checker/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://cyberinsurancecentral.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://cyberinsurancecentral.com/og-image.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://cyberinsurancecentral.com" },
+      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://cyberinsurancecentral.com/tools/" },
+      { "@type": "ListItem", "position": 3, "name": "Insurability Impact Checker", "item": "https://cyberinsurancecentral.com/tools/insurability-impact-checker/" }
+    ]
   }
-  .ic-result-summary {
-    border: 1px solid var(--accent);
-    background: var(--accent-pale);
-    padding: 20px 24px;
-    margin-bottom: 24px;
-    font-size: var(--small);
-    color: var(--charcoal);
-  }
-  .ic-result-item {
-    border: var(--hairline);
-    border-left: 3px solid #991b1b;
-    background: var(--surface);
-    padding: 14px 18px;
-    margin-bottom: 1px;
-    font-size: var(--small);
-  }
-  .ic-result-item.partial { border-left-color: #b45309; }
-  .ic-result-item strong { display: block; margin-bottom: 4px; }
-  .ic-result-item a { font-size: 12px; }
-  .ic-result-empty {
-    border: var(--hairline);
-    border-left: 3px solid #2e7d32;
-    background: var(--surface);
-    padding: 14px 18px;
-    font-size: var(--small);
-    color: var(--mid);
-  }
-</style>
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>:root{--accent:#8A6A1E;--accent-dim:#6E5518;--accent-pale:#F7F1E3}</style>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/config.js" defer></script>
+
+  <style>
+    .ic-progress {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 8px;
+    }
+    .ic-progress-track {
+      height: 4px;
+      background: var(--border);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .ic-progress-fill {
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.25s ease;
+      width: 0%;
+    }
+
+    .ic-question {
+      border: var(--hairline);
+      background: var(--surface);
+      padding: 20px 24px;
+      margin-bottom: 1px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .ic-question-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      width: 20px;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+    .ic-question-body { flex: 1; }
+    .ic-question-text { font-size: var(--small); font-weight: 700; margin-bottom: 12px; }
+    .ic-options { display: flex; gap: 8px; flex-wrap: wrap; }
+    .ic-option {
+      font-family: 'Space Mono', monospace;
+      font-size: var(--small);
+      font-weight: 700;
+      padding: 6px 18px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--mid);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .ic-option:hover { border-color: var(--accent); color: var(--accent); }
+    .ic-option.selected-yes { border-color: #2e7d32; background: #e6f2e8; color: #2e7d32; }
+    .ic-option.selected-partial { border-color: #b45309; background: #fbeee0; color: #b45309; }
+    .ic-option.selected-no { border-color: #991b1b; background: #fbe9e9; color: #991b1b; }
+
+    .ic-result { display: none; margin-top: 32px; }
+
+    .ic-headline {
+      border: 2px solid var(--accent);
+      padding: 18px 20px;
+      margin-bottom: 24px;
+    }
+    .ic-headline-label { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 6px; }
+    .ic-headline-value { font-size: 20px; font-weight: 700; color: var(--charcoal); line-height: 1.3; }
+
+    .ic-result-item {
+      border: var(--hairline);
+      border-left: 3px solid #991b1b;
+      background: var(--surface);
+      padding: 14px 18px;
+      margin-bottom: 1px;
+      font-size: var(--small);
+    }
+    .ic-result-item.partial { border-left-color: #b45309; }
+    .ic-result-item strong { display: block; margin-bottom: 4px; }
+    .ic-result-item a { font-size: 12px; }
+
+    @media (max-width: 600px) {
+      .ic-question { flex-direction: column; gap: 8px; }
+    }
+  </style>
 </head>
 <body>
-<div class="topbar">
-  <a href="/" class="topbar-brand">Cyber Insurance <span>Central</span></a>
-  <div class="topbar-divider"></div>
-  <div class="topbar-tagline">Carrier requirements, coverage comparisons, and underwriting insight for cyber insurance buyers.</div>
-</div>
-<div class="layout">
-  <div class="sidebar" id="sidebar-nav"></div>
-  <div class="main">
-    <div class="content">
-      <div class="breadcrumb">
-        <a href="/">Home</a>
-        <span class="breadcrumb-sep">/</span>
-        <a href="/tools/">Tools</a>
-        <span class="breadcrumb-sep">/</span>
-        <span>Insurability Impact Checker</span>
-      </div>
 
-      <span class="page-label">Tool</span>
-      <h1>Insurability Impact Checker</h1>
-      <p class="lead">
-        Answer seven questions about your current controls. See the likely
-        underwriting impact before you apply, not after.
-      </p>
+  <header class="topbar">
+    <a href="/" class="topbar-brand">Cyber Insurance <span>Central</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">Independent guidance for cyber insurance buyers</span>
+    <div class="topbar-right"><a href="/#stay-informed">Subscribe &rarr;</a></div>
+  </header>
 
-      <div id="ic-questions"></div>
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
 
-      <div class="ic-result" id="ic-result">
-        <div class="ic-result-summary" id="ic-result-summary"></div>
-        <div id="ic-result-items"></div>
-      </div>
+    <main class="main">
+      <article class="content">
+
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/tools/">Tools</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Insurability Impact Checker</span>
+        </nav>
+
+        <span class="page-label">Tool &mdash; Self-Assessment</span>
+        <h1>Insurability Impact Checker</h1>
+
+        <p class="section-intro">Answer seven questions about your current controls. See the likely underwriting impact before you apply, not after. No email required.</p>
+
+        <div class="ic-progress">
+          <span id="ic-progress-label">0 of 7 answered</span>
+        </div>
+        <div class="ic-progress-track">
+          <div class="ic-progress-fill" id="ic-progress-fill"></div>
+        </div>
+
+        <div id="ic-questions"></div>
+
+        <div class="ic-result" id="ic-result">
+          <div class="ic-headline" id="ic-headline">
+            <span class="ic-headline-label">Overall picture</span>
+            <div class="ic-headline-value" id="ic-headline-value"></div>
+          </div>
+          <div id="ic-result-items"></div>
+        </div>
+
+        <div class="newsletter-block" id="stay-informed">
+          <span class="page-label">Stay Informed</span>
+          <p>New guides publish weekly, and carrier requirements shift. Get notified when something changes.</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="you@company.com" required>
+            <button type="button">Subscribe</button>
+          </form>
+        </div>
+
+      </article>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="page-label">Cyber Insurance Central</span>
+      <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
     </div>
-  </div>
-</div>
+  </footer>
 
-<footer>
-  <div class="footer-inner">
-    <p>&copy; 2026 Cyber Insurance Central. Part of the Machines &amp; Words network.</p>
-  </div>
-</footer>
+  <script src="/nav.js"></script>
+  <script src="/newsletter.js"></script>
+  <script>
+  (function () {
+    const QUESTIONS = [
+      {
+        id: 'mfa',
+        label: 'Is MFA enforced across all users, including privileged/admin accounts?',
+        partialImpact: 'MFA available but not enforced on every account is one of the most common gaps between what gets attested and what carriers actually find. Expect a higher premium, a higher retention, or an outright decline.',
+        noImpact: 'MFA has moved from a recommended practice to close to a baseline requirement. Without it, particularly on privileged accounts, expect a higher premium, a higher retention, or an outright decline rather than a stricter question on the application.',
+        link: '/guides/evidence-collection-and-packaging/#what-it-contains'
+      },
+      {
+        id: 'edr',
+        label: 'Is EDR deployed to substantially all endpoints (not just licensed, actually reporting)?',
+        partialImpact: 'Partial EDR coverage is a materially different risk than full coverage, and carriers increasingly ask for the coverage percentage specifically, not just confirmation a platform is licensed.',
+        noImpact: 'Carriers want evidence that an attacker\'s presence on a device gets detected and can be acted on quickly. Without meaningful EDR coverage, expect this to surface directly in underwriting terms.',
+        link: '/landscape/underwriting-requirements/'
+      },
+      {
+        id: 'backups',
+        label: 'Are backups offline/immutable and has a restoration actually been tested in the last 12 months?',
+        partialImpact: 'A backup that has never been restored is an assumption, not a control. Some carriers now ask directly whether restoration has been tested and how recently.',
+        noImpact: 'Ransomware\'s leverage depends entirely on the victim having no other way to recover data. Without tested, offline or immutable backups, this is one of the more consequential gaps to close before applying.',
+        link: '/guides/evidence-collection-and-packaging/#what-it-contains'
+      },
+      {
+        id: 'irplan',
+        label: 'Is there a current, written incident response plan that\'s been rehearsed (tabletop) in the last 12 months?',
+        partialImpact: 'A plan that exists as a document but has never been walked through with the people who\'d execute it is weaker evidence than carriers increasingly expect.',
+        noImpact: 'Carriers have seen enough claims to know response speed and coordination materially affect how large a loss gets. No plan, or an untested one, is a real underwriting gap.',
+        link: '/guides/incident-response-panel/'
+      },
+      {
+        id: 'assets',
+        label: 'Is there a current, maintained asset inventory (hardware, software, data repositories)?',
+        partialImpact: 'An inventory that\'s meaningfully out of date undermines every other category\'s evidence alongside it, since carriers can\'t evaluate controls against an environment they can\'t map.',
+        noImpact: 'Without a current inventory, carriers can\'t meaningfully evaluate MFA coverage, EDR deployment, or overall exposure. This tends to surface as broader underwriting caution, not just a single question.',
+        link: '/guides/evidence-collection-and-packaging/'
+      },
+      {
+        id: 'vendor',
+        label: 'Is there a documented vendor/third-party risk review process, reviewed within the last 12 months?',
+        partialImpact: 'A review process that exists but isn\'t current is treated similarly to no process, given how much recent breach activity traces back to vendor access rather than a direct attack.',
+        noImpact: 'This has moved from a formality to a real underwriting question. Expect it to come up directly, particularly for organizations with significant third-party access to systems or data.',
+        link: '/guides/evidence-collection-and-packaging/'
+      },
+      {
+        id: 'training',
+        label: 'Has security awareness training, including a phishing simulation, been completed in the last 12 months?',
+        partialImpact: '"We conduct annual training" without a date or a simulation outcome attached is closer to attestation than evidence, the same gap underwriting evidence exists to close.',
+        noImpact: 'Dated training records and phishing simulation results are increasingly part of what carriers ask for directly, not just a policy statement that a program exists.',
+        link: '/guides/evidence-collection-and-packaging/'
+      }
+    ];
 
-<script src="/nav.js"></script>
-<script src="/newsletter.js"></script>
-<script>
-(function () {
-  const QUESTIONS = [
-    {
-      id: 'mfa',
-      label: 'Is MFA enforced across all users, including privileged/admin accounts?',
-      partialImpact: 'MFA available but not enforced on every account is one of the most common gaps between what gets attested and what carriers actually find. Expect a higher premium, a higher retention, or an outright decline.',
-      noImpact: 'MFA has moved from a recommended practice to close to a baseline requirement. Without it, particularly on privileged accounts, expect a higher premium, a higher retention, or an outright decline rather than a stricter question on the application.',
-      link: '/guides/evidence-collection-and-packaging/#what-it-contains'
-    },
-    {
-      id: 'edr',
-      label: 'Is EDR deployed to substantially all endpoints (not just licensed, actually reporting)?',
-      partialImpact: 'Partial EDR coverage is a materially different risk than full coverage, and carriers increasingly ask for the coverage percentage specifically, not just confirmation a platform is licensed.',
-      noImpact: 'Carriers want evidence that an attacker\'s presence on a device gets detected and can be acted on quickly. Without meaningful EDR coverage, expect this to surface directly in underwriting terms.',
-      link: '/landscape/underwriting-requirements/'
-    },
-    {
-      id: 'backups',
-      label: 'Are backups offline/immutable and has a restoration actually been tested in the last 12 months?',
-      partialImpact: 'A backup that has never been restored is an assumption, not a control. Some carriers now ask directly whether restoration has been tested and how recently.',
-      noImpact: 'Ransomware\'s leverage depends entirely on the victim having no other way to recover data. Without tested, offline or immutable backups, this is one of the more consequential gaps to close before applying.',
-      link: '/guides/evidence-collection-and-packaging/#what-it-contains'
-    },
-    {
-      id: 'irplan',
-      label: 'Is there a current, written incident response plan that\'s been rehearsed (tabletop) in the last 12 months?',
-      partialImpact: 'A plan that exists as a document but has never been walked through with the people who\'d execute it is weaker evidence than carriers increasingly expect.',
-      noImpact: 'Carriers have seen enough claims to know response speed and coordination materially affect how large a loss gets. No plan, or an untested one, is a real underwriting gap.',
-      link: '/guides/incident-response-panel/'
-    },
-    {
-      id: 'assets',
-      label: 'Is there a current, maintained asset inventory (hardware, software, data repositories)?',
-      partialImpact: 'An inventory that\'s meaningfully out of date undermines every other category\'s evidence alongside it, since carriers can\'t evaluate controls against an environment they can\'t map.',
-      noImpact: 'Without a current inventory, carriers can\'t meaningfully evaluate MFA coverage, EDR deployment, or overall exposure. This tends to surface as broader underwriting caution, not just a single question.',
-      link: '/guides/evidence-collection-and-packaging/'
-    },
-    {
-      id: 'vendor',
-      label: 'Is there a documented vendor/third-party risk review process, reviewed within the last 12 months?',
-      partialImpact: 'A review process that exists but isn\'t current is treated similarly to no process, given how much recent breach activity traces back to vendor access rather than a direct attack.',
-      noImpact: 'This has moved from a formality to a real underwriting question. Expect it to come up directly, particularly for organizations with significant third-party access to systems or data.',
-      link: '/guides/evidence-collection-and-packaging/'
-    },
-    {
-      id: 'training',
-      label: 'Has security awareness training, including a phishing simulation, been completed in the last 12 months?',
-      partialImpact: '"We conduct annual training" without a date or a simulation outcome attached is closer to attestation than evidence, the same gap underwriting evidence exists to close.',
-      noImpact: 'Dated training records and phishing simulation results are increasingly part of what carriers ask for directly, not just a policy statement that a program exists.',
-      link: '/guides/evidence-collection-and-packaging/'
-    }
-  ];
+    const answers = {};
 
-  const answers = {};
-
-  function renderQuestions() {
-    const container = document.getElementById('ic-questions');
-    container.innerHTML = QUESTIONS.map(function (q) {
-      return (
-        '<div class="ic-question">' +
-          '<div class="ic-question-text">' + q.label + '</div>' +
-          '<div class="ic-options">' +
-            '<button type="button" class="ic-option" data-q="' + q.id + '" data-val="yes">Yes</button>' +
-            '<button type="button" class="ic-option" data-q="' + q.id + '" data-val="partial">Partial</button>' +
-            '<button type="button" class="ic-option" data-q="' + q.id + '" data-val="no">No</button>' +
-          '</div>' +
-        '</div>'
-      );
-    }).join('');
-
-    container.querySelectorAll('.ic-option').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        const qid = btn.dataset.q;
-        const val = btn.dataset.val;
-        answers[qid] = val;
-
-        container.querySelectorAll('.ic-option[data-q="' + qid + '"]').forEach(function (b) {
-          b.classList.remove('selected-yes', 'selected-partial', 'selected-no');
-        });
-        btn.classList.add('selected-' + val);
-
-        renderResults();
-      });
-    });
-  }
-
-  function renderResults() {
-    const answeredCount = Object.keys(answers).length;
-    const resultBlock = document.getElementById('ic-result');
-    if (answeredCount === 0) {
-      resultBlock.style.display = 'none';
-      return;
-    }
-    resultBlock.style.display = 'block';
-
-    const gaps = QUESTIONS.filter(function (q) { return answers[q.id] === 'partial' || answers[q.id] === 'no'; });
-    const yesCount = QUESTIONS.filter(function (q) { return answers[q.id] === 'yes'; }).length;
-
-    const summary = document.getElementById('ic-result-summary');
-    if (answeredCount < QUESTIONS.length) {
-      summary.textContent = yesCount + ' of ' + answeredCount + ' answered so far show no gap. Keep going for the full picture.';
-    } else if (gaps.length === 0) {
-      summary.textContent = 'All seven categories show no gap based on your answers. Underwriting requirements still shift year to year, worth revisiting at renewal.';
-    } else {
-      summary.textContent = gaps.length + ' of ' + QUESTIONS.length + ' categories show a likely underwriting impact.';
-    }
-
-    const itemsContainer = document.getElementById('ic-result-items');
-    if (gaps.length === 0) {
-      itemsContainer.innerHTML = '';
-    } else {
-      itemsContainer.innerHTML = gaps.map(function (q) {
-        const val = answers[q.id];
-        const impact = val === 'partial' ? q.partialImpact : q.noImpact;
-        const cls = val === 'partial' ? 'partial' : '';
+    function renderQuestions() {
+      const container = document.getElementById('ic-questions');
+      container.innerHTML = QUESTIONS.map(function (q, i) {
         return (
-          '<div class="ic-result-item ' + cls + '">' +
-            '<strong>' + q.label + '</strong>' +
-            '<div>' + impact + '</div>' +
-            '<a href="' + q.link + '">Read more &rarr;</a>' +
+          '<div class="ic-question">' +
+            '<div class="ic-question-num">' + (i + 1) + '</div>' +
+            '<div class="ic-question-body">' +
+              '<div class="ic-question-text">' + q.label + '</div>' +
+              '<div class="ic-options">' +
+                '<button type="button" class="ic-option" data-q="' + q.id + '" data-val="yes">Yes</button>' +
+                '<button type="button" class="ic-option" data-q="' + q.id + '" data-val="partial">Partial</button>' +
+                '<button type="button" class="ic-option" data-q="' + q.id + '" data-val="no">No</button>' +
+              '</div>' +
+            '</div>' +
           '</div>'
         );
       }).join('');
-    }
-  }
 
-  renderQuestions();
-})();
-</script>
+      container.querySelectorAll('.ic-option').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const qid = btn.dataset.q;
+          const val = btn.dataset.val;
+          answers[qid] = val;
+
+          container.querySelectorAll('.ic-option[data-q="' + qid + '"]').forEach(function (b) {
+            b.classList.remove('selected-yes', 'selected-partial', 'selected-no');
+          });
+          btn.classList.add('selected-' + val);
+
+          renderProgress();
+          renderResults();
+        });
+      });
+    }
+
+    function renderProgress() {
+      const answeredCount = Object.keys(answers).length;
+      document.getElementById('ic-progress-label').textContent = answeredCount + ' of ' + QUESTIONS.length + ' answered';
+      document.getElementById('ic-progress-fill').style.width = (100 * answeredCount / QUESTIONS.length) + '%';
+    }
+
+    function renderResults() {
+      const answeredCount = Object.keys(answers).length;
+      const resultBlock = document.getElementById('ic-result');
+      if (answeredCount === 0) {
+        resultBlock.style.display = 'none';
+        return;
+      }
+      resultBlock.style.display = 'block';
+
+      const gaps = QUESTIONS.filter(function (q) { return answers[q.id] === 'partial' || answers[q.id] === 'no'; });
+      const yesCount = QUESTIONS.filter(function (q) { return answers[q.id] === 'yes'; }).length;
+
+      const headline = document.getElementById('ic-headline-value');
+      if (answeredCount < QUESTIONS.length) {
+        headline.textContent = yesCount + ' of ' + answeredCount + ' answered so far show no gap. Keep going for the full picture.';
+      } else if (gaps.length === 0) {
+        headline.textContent = 'All seven categories show no gap based on your answers. Underwriting requirements still shift year to year, worth revisiting at renewal.';
+      } else {
+        headline.textContent = gaps.length + ' of ' + QUESTIONS.length + ' categories show a likely underwriting impact.';
+      }
+
+      const itemsContainer = document.getElementById('ic-result-items');
+      if (gaps.length === 0) {
+        itemsContainer.innerHTML = '';
+      } else {
+        itemsContainer.innerHTML = gaps.map(function (q) {
+          const val = answers[q.id];
+          const impact = val === 'partial' ? q.partialImpact : q.noImpact;
+          const cls = val === 'partial' ? 'partial' : '';
+          return (
+            '<div class="ic-result-item ' + cls + '">' +
+              '<strong>' + q.label + '</strong>' +
+              '<div>' + impact + '</div>' +
+              '<a href="' + q.link + '">Read more &rarr;</a>' +
+            '</div>'
+          );
+        }).join('');
+      }
+    }
+
+    renderQuestions();
+    renderProgress();
+  })();
+  </script>
 </body>
 </html>

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
   <title>Cyber Insurance Central — Carrier Requirements &amp; Underwriting Guidance</title>
@@ -46,6 +47,10 @@
 
   <style>
     :root{--accent:#8A6A1E;--accent-dim:#6E5518;--accent-pale:#F7F1E3}
+    .card-body { font-size: var(--small); color: var(--mid); line-height: 1.5; }
+    .card-grid a.card { text-decoration: none; display: block; }
+    .card-grid a.card .card-label { color: var(--accent); }
+    .card-grid a.card:hover .card-body { color: var(--charcoal); }
   </style>
   <link rel="stylesheet" href="/styles.css">
   <script src="/config.js" defer></script>
@@ -72,6 +77,24 @@
 
         <p class="lead">Cyber insurance underwriting has hardened while pricing has softened, and the two facts are related. This site maps the market structure, tracks what carriers actually require, and gives buyers the tools to check their own standing, independent of any carrier or broker.</p>
 
+        <div class="card-grid">
+          <div class="card">
+            <span class="card-label">Pricing Trend</span>
+            <div class="card-value">8</div>
+            <div class="card-sub">consecutive quarters of premium declines</div>
+          </div>
+          <div class="card">
+            <span class="card-label">Underwriting Evidence</span>
+            <div class="card-value">7</div>
+            <div class="card-sub">core categories carriers ask about</div>
+          </div>
+          <div class="card">
+            <span class="card-label">Free Tools</span>
+            <div class="card-value">3</div>
+            <div class="card-sub">check your own standing, no signup</div>
+          </div>
+        </div>
+
         <h2>What this site covers</h2>
 
         <p>Cyber insurance spans carrier and MGA structures, admitted and surplus lines, coverage components with sublimits and exclusions that matter more than the headline policy limit, and underwriting requirements that shift as the market moves through soft and hard cycles. Buyers who understand this structure negotiate better terms than buyers who treat the purchase as a formality.</p>
@@ -80,40 +103,28 @@
 
         <h2>Start here</h2>
 
-        <div class="tool-header" style="border-bottom: none; padding-bottom: 0; margin-bottom: 24px;">
-          <div class="tool-meta">
-            <div class="tool-name"><a href="/landscape/">Market Overview</a></div>
-            <p style="font-size: var(--small); color: var(--mid); margin-bottom: 0;">
-              How the cyber insurance market is structured, and who actually buys this.
-            </p>
-          </div>
-        </div>
+        <div class="card-grid">
 
-        <div class="tool-header" style="border-bottom: none; padding-bottom: 0; margin-bottom: 24px;">
-          <div class="tool-meta">
-            <div class="tool-name"><a href="/landscape/carriers/">Carrier Index</a></div>
-            <p style="font-size: var(--small); color: var(--mid); margin-bottom: 0;">
-              Active carriers and MGAs, listed without ranking.
-            </p>
-          </div>
-        </div>
+          <a href="/landscape/" class="card">
+            <div class="card-label">Landscape</div>
+            <div class="card-body">How the cyber insurance market is structured, and who actually buys this.</div>
+          </a>
 
-        <div class="tool-header" style="border-bottom: none; padding-bottom: 0; margin-bottom: 24px;">
-          <div class="tool-meta">
-            <div class="tool-name"><a href="/guides/">Practical Guides</a></div>
-            <p style="font-size: var(--small); color: var(--mid); margin-bottom: 0;">
-              Buying, comparing, evidencing, renewing, and claiming.
-            </p>
-          </div>
-        </div>
+          <a href="/landscape/carriers/" class="card">
+            <div class="card-label">Carriers</div>
+            <div class="card-body">Active carriers and MGAs, listed without ranking.</div>
+          </a>
 
-        <div class="tool-header" style="border-bottom: none; padding-bottom: 0; margin-bottom: 24px;">
-          <div class="tool-meta">
-            <div class="tool-name"><a href="/tools/">Free Tools</a></div>
-            <p style="font-size: var(--small); color: var(--mid); margin-bottom: 0;">
-              Check your evidence, coverage gaps, and underwriting readiness.
-            </p>
-          </div>
+          <a href="/guides/" class="card">
+            <div class="card-label">Guides</div>
+            <div class="card-body">Buying, comparing, evidencing, renewing, and claiming.</div>
+          </a>
+
+          <a href="/tools/" class="card">
+            <div class="card-label">Tools</div>
+            <div class="card-body">Check your evidence, coverage gaps, and underwriting readiness.</div>
+          </a>
+
         </div>
 
         <h2>Why independent</h2>
