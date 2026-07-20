@@ -1,400 +1,479 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coverage Gap &amp; Sublimit Visualizer | Cyber Insurance Central</title>
-<meta name="description" content="See how much of your cyber insurance policy limit actually reaches ransomware, business interruption, and other loss types. Free, instant, no signup.">
-<link rel="canonical" href="https://cyberinsurancecentral.com/tools/sublimit-visualizer/">
-<meta property="og:title" content="Coverage Gap &amp; Sublimit Visualizer — Cyber Insurance Central">
-<meta property="og:description" content="See how much of your policy limit actually reaches each type of loss.">
-<meta property="og:url" content="https://cyberinsurancecentral.com/tools/sublimit-visualizer/">
-<meta property="og:type" content="website">
-<meta property="og:image" content="https://cyberinsurancecentral.com/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://cyberinsurancecentral.com/og-image.png">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<style>:root{--accent:#8A6A1E;--accent-dim:#6E5518;--accent-pale:#F7F1E3}</style>
-<link rel="stylesheet" href="/styles.css">
-<script src="/config.js" defer></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  .sv-inputs {
-    border: var(--hairline);
-    background: var(--surface);
-    padding: 24px;
-    margin-bottom: 32px;
-  }
-  .sv-field-row {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 12px;
-    align-items: center;
-    margin-bottom: 12px;
-  }
-  .sv-field-row:last-child { margin-bottom: 0; }
-  .sv-field-label { font-size: var(--small); color: var(--mid); }
-  .sv-field-row input {
-    font-family: 'Space Mono', monospace;
-    font-size: var(--small);
-    padding: 8px 10px;
-    border: var(--hairline);
-    background: var(--bg);
-    color: var(--charcoal);
-    width: 100%;
-  }
-  .sv-field-row input:focus { border-color: var(--accent); outline: none; }
-  .sv-policy-limit-row { border-bottom: var(--hairline); padding-bottom: 16px; margin-bottom: 16px; }
-  .sv-policy-limit-row .sv-field-label { font-weight: 700; color: var(--charcoal); }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
-  .sv-chart { margin-bottom: 32px; }
-  .sv-bar-wrap { margin-bottom: 20px; }
-  .sv-bar-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: var(--small);
-    margin-bottom: 6px;
-  }
-  .sv-bar-name { font-weight: 700; }
-  .sv-bar-value { color: var(--mid); }
-  .sv-bar-track {
-    height: 28px;
-    background: var(--bg);
-    border: var(--hairline);
-    position: relative;
-    overflow: hidden;
-  }
-  .sv-bar-fill {
-    height: 100%;
-    background: var(--accent);
-    transition: width 0.3s ease;
-  }
-  .sv-bar-fill.full { background: #2e7d32; }
-  .sv-bar-fill.gap { background: #b45309; }
+  <title>Coverage Gap &amp; Sublimit Visualizer | Cyber Insurance Central</title>
+  <meta name="description" content="See how much of your cyber insurance policy limit actually reaches ransomware, business interruption, and other loss types. Free, instant, no signup.">
+  <link rel="canonical" href="https://cyberinsurancecentral.com/tools/sublimit-visualizer/">
 
-  .sv-callouts { margin-bottom: 32px; }
-  .sv-callout-item {
-    border: var(--hairline);
-    border-left: 3px solid #b45309;
-    background: var(--surface);
-    padding: 14px 18px;
-    margin-bottom: 1px;
-    font-size: var(--small);
-  }
-  .sv-callout-item strong { color: var(--charcoal); }
-  .sv-callout-empty {
-    border: var(--hairline);
-    border-left: 3px solid #2e7d32;
-    background: var(--surface);
-    padding: 14px 18px;
-    font-size: var(--small);
-    color: var(--mid);
-  }
+  <meta property="og:title" content="Coverage Gap &amp; Sublimit Visualizer | Cyber Insurance Central">
+  <meta property="og:description" content="See how much of your policy limit actually reaches each type of loss.">
+  <meta property="og:url" content="https://cyberinsurancecentral.com/tools/sublimit-visualizer/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://cyberinsurancecentral.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://cyberinsurancecentral.com/og-image.png">
 
-  .sv-post-print {
-    display: none;
-    border: 1px solid var(--accent);
-    background: var(--accent-pale);
-    padding: 20px 24px;
-    margin-top: 24px;
-    position: relative;
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://cyberinsurancecentral.com" },
+      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://cyberinsurancecentral.com/tools/" },
+      { "@type": "ListItem", "position": 3, "name": "Coverage Gap & Sublimit Visualizer", "item": "https://cyberinsurancecentral.com/tools/sublimit-visualizer/" }
+    ]
   }
-  .sv-post-print-close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: none;
-    border: none;
-    font-size: 16px;
-    color: var(--mid);
-    cursor: pointer;
-    line-height: 1;
-  }
-  .sv-post-print-close:hover { color: var(--charcoal); }
-  .sv-post-print-form { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-  .sv-post-print-form input {
-    flex: 1;
-    min-width: 200px;
-    font-family: 'Space Mono', monospace;
-    font-size: var(--small);
-    padding: 8px 12px;
-    border: var(--hairline);
-    background: var(--surface);
-  }
-  .sv-post-print-form button {
-    font-family: 'Space Mono', monospace;
-    font-size: var(--small);
-    font-weight: 700;
-    padding: 8px 16px;
-    background: var(--accent);
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  .sv-post-print-form button:disabled { background: var(--border); color: var(--faint); cursor: default; }
+  </script>
 
-  .sv-print-header { display: none; }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
-  @media print {
-    .topbar, .sidebar, .breadcrumb, .page-label, .lead,
-    .sv-inputs, .sv-actions, .sv-post-print, footer {
-      display: none !important;
+  <style>:root{--accent:#8A6A1E;--accent-dim:#6E5518;--accent-pale:#F7F1E3}</style>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/config.js" defer></script>
+
+  <style>
+    .sv-layout { display:grid; grid-template-columns: 320px 1fr; gap:1px; background:var(--border); border:var(--hairline); margin:24px 0 8px; }
+    .sv-panel { background:var(--surface); padding:24px; }
+    .sv-field { margin-bottom:20px; }
+    .sv-field:last-child { margin-bottom:0; }
+    .sv-field-label { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
+    .sv-field-name { font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--charcoal); }
+    .sv-field-value { font-size:13px; font-weight:700; color:var(--accent); font-variant-numeric: tabular-nums; }
+    .sv-field input[type=text] {
+      width:100%; font-family:inherit; font-size:13px; padding:8px 10px; border:var(--hairline);
+      background:var(--bg); color:var(--charcoal); font-variant-numeric: tabular-nums;
     }
-    .sv-print-header {
-      display: block !important;
-      border-bottom: 2px solid var(--charcoal);
-      padding-bottom: 16px;
-      margin-bottom: 24px;
-    }
-    .sv-print-title { font-size: var(--h1); font-weight: 700; margin-bottom: 4px; }
-    .sv-print-meta { font-size: var(--small); color: var(--mid); }
-    .main { margin-left: 0 !important; padding: 0 !important; }
-    body { background: white !important; }
-  }
+    .sv-field input[type=text]:focus { border-color:var(--accent); outline:none; }
+    .sv-field-desc { font-size:11px; color:var(--faint); margin-top:6px; line-height:1.5; }
+    .sv-policy-field { border-bottom: var(--hairline); padding-bottom: 20px; margin-bottom: 20px; }
+    .sv-policy-field .sv-field-name { color: var(--accent); }
 
-  @media (max-width: 600px) {
-    .sv-field-row { grid-template-columns: 1fr; }
-  }
-</style>
+    .sv-results { padding:24px; }
+
+    .sv-headline {
+      border:2px solid var(--accent);
+      padding:18px 20px;
+      margin-bottom:24px;
+    }
+    .sv-headline-label { font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:6px; }
+    .sv-headline-value { font-size:22px; font-weight:700; color:var(--charcoal); line-height:1.2; }
+    .sv-headline-sub { font-size:12px; color:var(--mid); margin-top:4px; line-height:1.5; }
+
+    .sv-bar-wrap { margin-bottom: 24px; }
+    .sv-bar-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+    .sv-bar-row-label { width:150px; flex-shrink:0; font-size:11px; font-weight:700; color:var(--mid); text-transform:uppercase; letter-spacing:0.03em; }
+    .sv-bar-track { flex:1; height:22px; background:var(--bg); border:var(--hairline); position:relative; overflow:hidden; }
+    .sv-bar-fill { height:100%; background:#2e7d32; transition:width 0.25s ease; }
+    .sv-bar-fill.gap { background:#b45309; }
+    .sv-bar-amount { font-size:11px; font-weight:700; color:var(--charcoal); width:130px; text-align:right; flex-shrink:0; font-variant-numeric: tabular-nums; }
+
+    .sv-narrative {
+      font-size:12px; color:var(--charcoal); background:var(--bg); border:var(--hairline);
+      padding:14px 18px; line-height:1.7; margin-bottom: 20px;
+    }
+    .sv-narrative strong { color: var(--accent-dim); }
+    .sv-narrative a { color: var(--accent-dim); }
+
+    .sv-callouts { margin-bottom: 8px; }
+    .sv-callout-item {
+      border: var(--hairline);
+      border-left: 3px solid #b45309;
+      background: var(--surface);
+      padding: 12px 16px;
+      margin-bottom: 1px;
+      font-size: 12px;
+    }
+    .sv-callout-item strong { color: var(--charcoal); }
+
+    .sv-disclaimer { font-size:11px; color:var(--faint); margin-top:16px; line-height:1.6; }
+
+    .sv-actions { margin-top: 20px; }
+    .sv-actions button {
+      font-family: 'Space Mono', monospace;
+      font-size: var(--small);
+      font-weight: 700;
+      padding: 8px 16px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .sv-post-print {
+      display: none;
+      border: 1px solid var(--accent);
+      background: var(--accent-pale);
+      padding: 20px 24px;
+      margin-top: 24px;
+      position: relative;
+    }
+    .sv-post-print-close {
+      position: absolute; top: 12px; right: 12px;
+      background: none; border: none; font-size: 16px; color: var(--mid); cursor: pointer; line-height: 1;
+    }
+    .sv-post-print-close:hover { color: var(--charcoal); }
+    .sv-post-print-form { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .sv-post-print-form input {
+      flex: 1; min-width: 200px; font-family: 'Space Mono', monospace; font-size: var(--small);
+      padding: 8px 12px; border: var(--hairline); background: var(--surface);
+    }
+    .sv-post-print-form button {
+      font-family: 'Space Mono', monospace; font-size: var(--small); font-weight: 700;
+      padding: 8px 16px; background: var(--accent); color: white; border: none; cursor: pointer;
+    }
+    .sv-post-print-form button:disabled { background: var(--border); color: var(--faint); cursor: default; }
+
+    .sv-print-header { display: none; }
+
+    @media print {
+      .topbar, .sidebar, .breadcrumb, .page-label, .lead,
+      .sv-panel:first-child, .sv-actions, .sv-post-print, footer {
+        display: none !important;
+      }
+      .sv-layout { grid-template-columns: 1fr; border: none; background: none; }
+      .sv-print-header {
+        display: block !important;
+        border-bottom: 2px solid var(--charcoal);
+        padding-bottom: 16px;
+        margin-bottom: 24px;
+      }
+      .sv-print-title { font-size: var(--h1); font-weight: 700; margin-bottom: 4px; }
+      .sv-print-meta { font-size: var(--small); color: var(--mid); }
+      .main { margin-left: 0 !important; padding: 0 !important; }
+      body { background: white !important; }
+    }
+
+    @media (max-width: 760px) {
+      .sv-layout { grid-template-columns: 1fr; }
+      .sv-bar-row-label { width: 100px; }
+    }
+  </style>
 </head>
 <body>
-<div class="topbar">
-  <a href="/" class="topbar-brand">Cyber Insurance <span>Central</span></a>
-  <div class="topbar-divider"></div>
-  <div class="topbar-tagline">Carrier requirements, coverage comparisons, and underwriting insight for cyber insurance buyers.</div>
-</div>
-<div class="layout">
-  <div class="sidebar" id="sidebar-nav"></div>
-  <div class="main">
-    <div class="content">
-      <div class="breadcrumb">
-        <a href="/">Home</a>
-        <span class="breadcrumb-sep">/</span>
-        <a href="/tools/">Tools</a>
-        <span class="breadcrumb-sep">/</span>
-        <span>Coverage Gap &amp; Sublimit Visualizer</span>
-      </div>
 
-      <span class="page-label">Tool</span>
-      <h1>Coverage Gap &amp; Sublimit Visualizer</h1>
-      <p class="lead">
-       Your policy limit is the ceiling. Sublimits decide how much of it you can actually collect for any given loss. Enter your numbers to see the gap. 
-      </p>
+  <header class="topbar">
+    <a href="/" class="topbar-brand">Cyber Insurance <span>Central</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">Independent guidance for cyber insurance buyers</span>
+    <div class="topbar-right"><a href="/#stay-informed">Subscribe &rarr;</a></div>
+  </header>
 
-      <div class="sv-print-header">
-        <div class="sv-print-title">Coverage Gap &amp; Sublimit Breakdown</div>
-        <div class="sv-print-meta" id="sv-print-date"></div>
-      </div>
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
 
-      <div class="sv-inputs">
-        <div class="sv-field-row sv-policy-limit-row">
-          <label class="sv-field-label">Overall policy limit ($)</label>
-          <input type="number" id="sv-policy-limit" placeholder="5000000" min="0" step="1000">
+    <main class="main">
+      <article class="content">
+
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/tools/">Tools</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Coverage Gap &amp; Sublimit Visualizer</span>
+        </nav>
+
+        <span class="page-label">Tool &mdash; Coverage Model</span>
+        <h1>Coverage Gap &amp; Sublimit Visualizer</h1>
+
+        <p class="section-intro">Your policy limit is the ceiling. Sublimits decide how much of it you can actually collect for any given loss. Enter your numbers to see the gap. No email required.</p>
+
+        <div class="sv-print-header">
+          <div class="sv-print-title">Coverage Gap &amp; Sublimit Breakdown</div>
+          <div class="sv-print-meta" id="sv-print-date"></div>
         </div>
-        <div class="sv-field-row">
-          <label class="sv-field-label">Ransomware / cyber extortion sublimit ($, if any)</label>
-          <input type="number" id="sv-ransomware" placeholder="Leave blank if same as policy limit" min="0" step="1000">
-        </div>
-        <div class="sv-field-row">
-          <label class="sv-field-label">Business interruption sublimit ($, if any)</label>
-          <input type="number" id="sv-bi" placeholder="Leave blank if same as policy limit" min="0" step="1000">
-        </div>
-        <div class="sv-field-row">
-          <label class="sv-field-label">Breach response sublimit ($, if any)</label>
-          <input type="number" id="sv-breach-response" placeholder="Leave blank if same as policy limit" min="0" step="1000">
-        </div>
-        <div class="sv-field-row">
-          <label class="sv-field-label">Regulatory defense &amp; fines sublimit ($, if any)</label>
-          <input type="number" id="sv-regulatory" placeholder="Leave blank if same as policy limit" min="0" step="1000">
-        </div>
-        <div class="sv-field-row">
-          <label class="sv-field-label">Data restoration sublimit ($, if any)</label>
-          <input type="number" id="sv-data-restoration" placeholder="Leave blank if same as policy limit" min="0" step="1000">
-        </div>
-      </div>
 
-      <div class="sv-chart" id="sv-chart"></div>
+        <div class="sv-layout">
 
-      <div class="sv-callouts" id="sv-callouts"></div>
+          <div class="sv-panel">
 
-      <div class="section-intro">
-        <p>
-          This tool doesn't verify anything itself, it just visualizes the
-          numbers you enter. See <a href="/landscape/coverage-components/">coverage
-          components</a> for what each of these categories actually covers,
-          and why sublimits matter more than the headline policy limit.
-        </p>
-      </div>
+            <div class="sv-field sv-policy-field">
+              <div class="sv-field-label">
+                <span class="sv-field-name">Overall policy limit</span>
+              </div>
+              <input type="text" inputmode="numeric" id="sv-policy-limit" placeholder="5,000,000">
+              <div class="sv-field-desc">The headline number on the cover page, in dollars.</div>
+            </div>
 
-      <div class="sv-actions" style="margin-top: 24px;">
-        <button id="sv-print" style="font-family: 'Space Mono', monospace; font-size: var(--small); font-weight: 700; padding: 8px 16px; background: var(--accent); color: white; border: none; cursor: pointer;">Print / Save as PDF</button>
-      </div>
+            <div class="sv-field">
+              <div class="sv-field-label">
+                <span class="sv-field-name">Ransomware / extortion</span>
+              </div>
+              <input type="text" inputmode="numeric" id="sv-ransomware" placeholder="Same as policy limit if blank">
+              <div class="sv-field-desc">Sublimit specific to ransomware payments and negotiation.</div>
+            </div>
 
-      <div class="sv-post-print" id="sv-post-print">
-        <button class="sv-post-print-close" id="sv-post-print-close" aria-label="Dismiss">&times;</button>
-        <span class="page-label" style="margin-bottom:6px;">Stay Informed</span>
-        <p style="font-size: var(--small); color: var(--charcoal); margin-bottom: 0;">
-          Carrier requirements and sublimit patterns shift. Get notified when
-          something changes that affects coverage gaps like these.
-        </p>
-        <form class="sv-post-print-form" id="sv-post-print-form">
-          <input type="email" id="sv-post-print-email" placeholder="you@company.com" required>
-          <button type="submit" id="sv-post-print-submit">Subscribe</button>
-        </form>
-        <div id="sv-post-print-msg" style="font-size: 11px; margin-top: 8px;"></div>
-      </div>
+            <div class="sv-field">
+              <div class="sv-field-label">
+                <span class="sv-field-name">Business interruption</span>
+              </div>
+              <input type="text" inputmode="numeric" id="sv-bi" placeholder="Same as policy limit if blank">
+              <div class="sv-field-desc">Sublimit on lost income while systems are down.</div>
+            </div>
+
+            <div class="sv-field">
+              <div class="sv-field-label">
+                <span class="sv-field-name">Breach response</span>
+              </div>
+              <input type="text" inputmode="numeric" id="sv-breach-response" placeholder="Same as policy limit if blank">
+              <div class="sv-field-desc">Forensics, legal, notification, credit monitoring.</div>
+            </div>
+
+            <div class="sv-field">
+              <div class="sv-field-label">
+                <span class="sv-field-name">Regulatory defense &amp; fines</span>
+              </div>
+              <input type="text" inputmode="numeric" id="sv-regulatory" placeholder="Same as policy limit if blank">
+              <div class="sv-field-desc">Investigation defense, and fines where insurable.</div>
+            </div>
+
+            <div class="sv-field">
+              <div class="sv-field-label">
+                <span class="sv-field-name">Data restoration</span>
+              </div>
+              <input type="text" inputmode="numeric" id="sv-data-restoration" placeholder="Same as policy limit if blank">
+              <div class="sv-field-desc">Rebuilding or recovering damaged data and systems.</div>
+            </div>
+
+          </div>
+
+          <div class="sv-results">
+
+            <div class="sv-headline" id="sv-headline">
+              <span class="sv-headline-label">Overall picture</span>
+              <div class="sv-headline-value" id="sv-headline-value">Enter a policy limit to begin</div>
+              <div class="sv-headline-sub" id="sv-headline-sub"></div>
+            </div>
+
+            <div class="sv-bar-wrap" id="sv-chart"></div>
+
+            <div class="sv-narrative" id="sv-narrative" style="display:none;"></div>
+
+            <div class="sv-callouts" id="sv-callouts"></div>
+
+            <p class="sv-disclaimer">This tool doesn't verify anything itself, it visualizes the numbers you enter. See the <a href="/landscape/coverage-components/">coverage components</a> page for what each category actually covers, and why sublimits matter more than the headline policy limit.</p>
+
+            <div class="sv-actions">
+              <button id="sv-print" type="button">Print / Save as PDF</button>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="sv-post-print" id="sv-post-print">
+          <button class="sv-post-print-close" id="sv-post-print-close" aria-label="Dismiss">&times;</button>
+          <span class="page-label" style="margin-bottom:6px;">Stay Informed</span>
+          <p style="font-size: var(--small); color: var(--charcoal); margin-bottom: 0;">
+            Carrier requirements and sublimit patterns shift. Get notified when
+            something changes that affects coverage gaps like these.
+          </p>
+          <form class="sv-post-print-form" id="sv-post-print-form">
+            <input type="email" id="sv-post-print-email" placeholder="you@company.com" required>
+            <button type="submit" id="sv-post-print-submit">Subscribe</button>
+          </form>
+          <div id="sv-post-print-msg" style="font-size: 11px; margin-top: 8px;"></div>
+        </div>
+
+      </article>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="page-label">Cyber Insurance Central</span>
+      <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
     </div>
-  </div>
-</div>
+  </footer>
 
-<footer>
-  <div class="footer-inner">
-    <p>&copy; 2026 Cyber Insurance Central. Part of the Machines &amp; Words network.</p>
-  </div>
-</footer>
+  <script src="/nav.js"></script>
+  <script src="/newsletter.js"></script>
+  <script>
+  (function () {
+    const LOSS_TYPES = [
+      { id: 'ransomware', label: 'Ransomware', inputId: 'sv-ransomware', guideLink: '/landscape/coverage-components/' },
+      { id: 'bi', label: 'Business Interruption', inputId: 'sv-bi', guideLink: '/landscape/coverage-components/' },
+      { id: 'breach-response', label: 'Breach Response', inputId: 'sv-breach-response', guideLink: '/landscape/coverage-components/' },
+      { id: 'regulatory', label: 'Regulatory & Fines', inputId: 'sv-regulatory', guideLink: '/landscape/coverage-components/' },
+      { id: 'data-restoration', label: 'Data Restoration', inputId: 'sv-data-restoration', guideLink: '/landscape/coverage-components/' }
+    ];
 
-<script src="/nav.js"></script>
-<script src="/newsletter.js"></script>
-<script>
-(function () {
-  const LOSS_TYPES = [
-    { id: 'ransomware', label: 'Ransomware / Cyber Extortion', inputId: 'sv-ransomware' },
-    { id: 'bi', label: 'Business Interruption', inputId: 'sv-bi' },
-    { id: 'breach-response', label: 'Breach Response', inputId: 'sv-breach-response' },
-    { id: 'regulatory', label: 'Regulatory Defense & Fines', inputId: 'sv-regulatory' },
-    { id: 'data-restoration', label: 'Data Restoration', inputId: 'sv-data-restoration' }
-  ];
-
-  function fmt(n) {
-    return '$' + Number(n).toLocaleString('en-US');
-  }
-
-  function getValues() {
-    const policyLimit = parseFloat(document.getElementById('sv-policy-limit').value) || 0;
-    const items = LOSS_TYPES.map(function (lt) {
-      const raw = document.getElementById(lt.inputId).value;
-      const sublimit = raw === '' ? policyLimit : parseFloat(raw);
-      return { id: lt.id, label: lt.label, sublimit: Math.max(0, Math.min(sublimit, policyLimit || sublimit)) };
-    });
-    return { policyLimit, items };
-  }
-
-  function render() {
-    const { policyLimit, items } = getValues();
-    const chart = document.getElementById('sv-chart');
-    const callouts = document.getElementById('sv-callouts');
-
-    if (!policyLimit) {
-      chart.innerHTML = '<div style="font-size:var(--small); color:var(--faint); padding:24px 0;">Enter a policy limit to see the breakdown.</div>';
-      callouts.innerHTML = '';
-      return;
+    function parseNum(str) {
+      if (!str) return null;
+      const cleaned = str.replace(/[^0-9.]/g, '');
+      const n = parseFloat(cleaned);
+      return isNaN(n) ? null : n;
     }
 
-    chart.innerHTML = items.map(function (item) {
-      const pct = policyLimit ? Math.round((item.sublimit / policyLimit) * 100) : 0;
-      const isFull = item.sublimit >= policyLimit;
-      return (
-        '<div class="sv-bar-wrap">' +
-          '<div class="sv-bar-label">' +
-            '<span class="sv-bar-name">' + item.label + '</span>' +
-            '<span class="sv-bar-value">' + fmt(item.sublimit) + ' (' + pct + '% of policy limit)</span>' +
-          '</div>' +
-          '<div class="sv-bar-track">' +
-            '<div class="sv-bar-fill ' + (isFull ? 'full' : 'gap') + '" style="width:' + pct + '%;"></div>' +
-          '</div>' +
-        '</div>'
-      );
-    }).join('');
+    function fmt(n) {
+      return '$' + Math.round(n).toLocaleString('en-US');
+    }
 
-    const gaps = items.filter(function (item) { return item.sublimit < policyLimit; });
-    if (gaps.length === 0) {
-      callouts.innerHTML = '<div class="sv-callout-empty">No sublimits entered below your policy limit. Every category currently reaches the full amount.</div>';
-    } else {
-      callouts.innerHTML = gaps.map(function (item) {
-        const pct = Math.round((item.sublimit / policyLimit) * 100);
+    function wireCurrencyField(id) {
+      const el = document.getElementById(id);
+      el.addEventListener('blur', function () {
+        const n = parseNum(el.value);
+        el.value = n === null ? '' : Math.round(n).toLocaleString('en-US');
+        render();
+      });
+      el.addEventListener('input', render);
+    }
+
+    function getValues() {
+      const policyLimit = parseNum(document.getElementById('sv-policy-limit').value) || 0;
+      const items = LOSS_TYPES.map(function (lt) {
+        const raw = document.getElementById(lt.inputId).value;
+        const parsed = parseNum(raw);
+        const sublimit = parsed === null ? policyLimit : parsed;
+        return { id: lt.id, label: lt.label, guideLink: lt.guideLink, sublimit: Math.max(0, Math.min(sublimit, policyLimit || sublimit)) };
+      });
+      return { policyLimit, items };
+    }
+
+    function render() {
+      const { policyLimit, items } = getValues();
+      const chart = document.getElementById('sv-chart');
+      const narrative = document.getElementById('sv-narrative');
+      const callouts = document.getElementById('sv-callouts');
+      const headlineValue = document.getElementById('sv-headline-value');
+      const headlineSub = document.getElementById('sv-headline-sub');
+
+      if (!policyLimit) {
+        chart.innerHTML = '';
+        narrative.style.display = 'none';
+        callouts.innerHTML = '';
+        headlineValue.textContent = 'Enter a policy limit to begin';
+        headlineSub.textContent = '';
+        return;
+      }
+
+      chart.innerHTML = items.map(function (item) {
+        const pct = policyLimit ? Math.round((item.sublimit / policyLimit) * 100) : 0;
+        const isFull = item.sublimit >= policyLimit;
         return (
-          '<div class="sv-callout-item">' +
-            '<strong>' + item.label + '</strong> is capped at ' + fmt(item.sublimit) +
-            ', ' + pct + '% of your overall ' + fmt(policyLimit) + ' policy limit.' +
+          '<div class="sv-bar-row">' +
+            '<span class="sv-bar-row-label">' + item.label + '</span>' +
+            '<div class="sv-bar-track"><div class="sv-bar-fill ' + (isFull ? '' : 'gap') + '" style="width:' + pct + '%;"></div></div>' +
+            '<span class="sv-bar-amount">' + fmt(item.sublimit) + ' (' + pct + '%)</span>' +
           '</div>'
         );
       }).join('');
+
+      const gaps = items.filter(function (item) { return item.sublimit < policyLimit; });
+      const worst = gaps.length
+        ? gaps.reduce(function (a, b) { return (a.sublimit / policyLimit) < (b.sublimit / policyLimit) ? a : b; })
+        : null;
+
+      if (gaps.length === 0) {
+        headlineValue.textContent = 'Full coverage across all five categories';
+        headlineSub.textContent = 'Every category currently reaches your full ' + fmt(policyLimit) + ' policy limit.';
+      } else {
+        const worstPct = Math.round((worst.sublimit / policyLimit) * 100);
+        headlineValue.textContent = gaps.length + ' of 5 categories capped below your policy limit';
+        headlineSub.textContent = worst.label + ' is your tightest gap, reaching only ' + worstPct + '% of the headline number.';
+      }
+
+      if (gaps.length === 0) {
+        narrative.style.display = 'none';
+      } else {
+        narrative.style.display = 'block';
+        narrative.innerHTML =
+          '<strong>What this means:</strong> a policy that looks like ' + fmt(policyLimit) +
+          ' of protection on the cover page actually caps ' + gaps.length + ' loss type' + (gaps.length === 1 ? '' : 's') +
+          ' well below that number. ' +
+          (worst ? worst.label + ' is the narrowest, capped at ' + fmt(worst.sublimit) + '. ' : '') +
+          'If ' + (gaps.length === 1 ? 'this is' : 'any of these are') +
+          ' the loss type most likely for your organization, the real ceiling on a claim is the sublimit, not the number on the cover page. See <a href="/landscape/coverage-components/">coverage components</a> for why this happens, and consider the <a href="/tools/insurability-impact-checker/">insurability impact checker</a> to see how your underlying controls affect the terms carriers will actually offer.';
+      }
+
+      if (gaps.length === 0) {
+        callouts.innerHTML = '';
+      } else {
+        callouts.innerHTML = gaps.map(function (item) {
+          const pct = Math.round((item.sublimit / policyLimit) * 100);
+          return (
+            '<div class="sv-callout-item">' +
+              '<strong>' + item.label + '</strong> is capped at ' + fmt(item.sublimit) +
+              ', ' + pct + '% of your overall ' + fmt(policyLimit) + ' policy limit.' +
+            '</div>'
+          );
+        }).join('');
+      }
     }
-  }
 
-  ['sv-policy-limit', 'sv-ransomware', 'sv-bi', 'sv-breach-response', 'sv-regulatory', 'sv-data-restoration'].forEach(function (id) {
-    document.getElementById(id).addEventListener('input', render);
-  });
+    ['sv-policy-limit', 'sv-ransomware', 'sv-bi', 'sv-breach-response', 'sv-regulatory', 'sv-data-restoration'].forEach(wireCurrencyField);
 
-  render();
+    render();
 
-  document.getElementById('sv-print-date').textContent =
-    'Generated ' + new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('sv-print-date').textContent =
+      'Generated ' + new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
-  document.getElementById('sv-print').addEventListener('click', function () {
-    window.print();
-  });
+    document.getElementById('sv-print').addEventListener('click', function () {
+      window.print();
+    });
 
-  // Soft post-print email prompt. Fires on afterprint (browser dialog closed,
-  // whether they actually printed or canceled) — a reasonable proxy for
-  // "engaged enough to want a copy." Dismissible, and only shown once per
-  // session so it doesn't nag on repeat prints.
-  const WORKER_URL = 'https://newsletter-cyberinsurancecentral.whereismy328.workers.dev/subscribe';
-  const GROUP_ID = '193395108513580215';
-  const DISMISS_KEY = 'sv-post-print-dismissed';
+    const WORKER_URL = 'https://newsletter-cyberinsurancecentral.whereismy328.workers.dev/subscribe';
+    const GROUP_ID = '193395108513580215';
+    const DISMISS_KEY = 'sv-post-print-dismissed';
 
-  window.addEventListener('afterprint', function () {
-    if (sessionStorage.getItem(DISMISS_KEY)) return;
-    document.getElementById('sv-post-print').style.display = 'block';
-  });
+    window.addEventListener('afterprint', function () {
+      if (sessionStorage.getItem(DISMISS_KEY)) return;
+      document.getElementById('sv-post-print').style.display = 'block';
+    });
 
-  document.getElementById('sv-post-print-close').addEventListener('click', function () {
-    document.getElementById('sv-post-print').style.display = 'none';
-    try { sessionStorage.setItem(DISMISS_KEY, 'true'); } catch (e) {}
-  });
+    document.getElementById('sv-post-print-close').addEventListener('click', function () {
+      document.getElementById('sv-post-print').style.display = 'none';
+      try { sessionStorage.setItem(DISMISS_KEY, 'true'); } catch (e) {}
+    });
 
-  document.getElementById('sv-post-print-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const email = document.getElementById('sv-post-print-email').value.trim();
-    const btn = document.getElementById('sv-post-print-submit');
-    const msg = document.getElementById('sv-post-print-msg');
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      msg.textContent = 'Please enter a valid email address.';
-      msg.style.color = '#991b1b';
-      return;
-    }
-    btn.disabled = true;
-    msg.textContent = 'Subscribing...';
-    msg.style.color = 'var(--faint)';
+    document.getElementById('sv-post-print-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const email = document.getElementById('sv-post-print-email').value.trim();
+      const btn = document.getElementById('sv-post-print-submit');
+      const msg = document.getElementById('sv-post-print-msg');
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        msg.textContent = 'Please enter a valid email address.';
+        msg.style.color = '#991b1b';
+        return;
+      }
+      btn.disabled = true;
+      msg.textContent = 'Subscribing...';
+      msg.style.color = 'var(--faint)';
 
-    fetch(WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email, group_id: GROUP_ID })
-    })
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        if (data.message === 'Subscribed') {
-          msg.textContent = "You're on the list.";
-          msg.style.color = 'var(--accent)';
-          try { sessionStorage.setItem(DISMISS_KEY, 'true'); } catch (e) {}
-        } else {
-          msg.textContent = 'Something went wrong: ' + (data.detail || data.message || 'unknown error') + '.';
+      fetch(WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, group_id: GROUP_ID })
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.message === 'Subscribed') {
+            msg.textContent = "You're on the list.";
+            msg.style.color = 'var(--accent)';
+            try { sessionStorage.setItem(DISMISS_KEY, 'true'); } catch (e) {}
+          } else {
+            msg.textContent = 'Something went wrong: ' + (data.detail || data.message || 'unknown error') + '.';
+            msg.style.color = '#991b1b';
+            btn.disabled = false;
+          }
+        })
+        .catch(function () {
+          msg.textContent = 'Something went wrong. Try again.';
           msg.style.color = '#991b1b';
           btn.disabled = false;
-        }
-      })
-      .catch(function () {
-        msg.textContent = 'Something went wrong. Try again.';
-        msg.style.color = '#991b1b';
-        btn.disabled = false;
-      });
-  });
-})();
-</script>
+        });
+    });
+  })();
+  </script>
 </body>
 </html>
