@@ -51,6 +51,8 @@
     .card-grid a.card { text-decoration: none; display: block; }
     .card-grid a.card .card-label { color: var(--accent); }
     .card-grid a.card:hover .card-body { color: var(--charcoal); }
+    .stat-row { grid-template-columns: repeat(3, 1fr) !important; }
+    .stat-row .card-label { min-height: 28px; }
   </style>
   <link rel="stylesheet" href="/styles.css">
   <script src="/config.js" defer></script>
@@ -77,14 +79,14 @@
 
         <p class="lead">Cyber insurance underwriting has hardened while pricing has softened, and the two facts are related. This site maps the market structure, tracks what carriers actually require, and gives buyers the tools to check their own standing, independent of any carrier or broker.</p>
 
-        <div class="card-grid">
+        <div class="card-grid stat-row">
           <div class="card">
             <span class="card-label">Pricing Trend</span>
             <div class="card-value">8</div>
             <div class="card-sub">consecutive quarters of premium declines</div>
           </div>
           <div class="card">
-            <span class="card-label">Underwriting Evidence</span>
+            <span class="card-label">Evidence Categories</span>
             <div class="card-value">7</div>
             <div class="card-sub">core categories carriers ask about</div>
           </div>
