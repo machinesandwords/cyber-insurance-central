@@ -1,0 +1,52 @@
+[
+  {
+    "id": "who-should-be-in-the-room",
+    "title": "Who Should Be in the Room: Cyber Insurance Buying Committee Roles",
+    "category": "getting-ready-to-buy",
+    "roles": ["ciso", "cfo-risk", "general-counsel"],
+    "dated": false,
+    "summary": "Cyber insurance is typically CFO-owned, not CISO-owned, and that gap has a cost. Who actually needs a seat at the table, and why.",
+    "url": "/guides/who-should-be-in-the-room/",
+    "published": "2026-07-19"
+  },
+  {
+    "id": "how-to-compare-cyber-insurance-quotes",
+    "title": "How to Compare Cyber Insurance Quotes: A CISO's Guide",
+    "category": "evaluating-carriers",
+    "roles": ["ciso"],
+    "dated": false,
+    "summary": "Most quote-comparison guides are written for brokers. What to actually check as the person who knows whether the controls being represented are real.",
+    "url": "/guides/how-to-compare-cyber-insurance-quotes/",
+    "published": "2026-07-19"
+  },
+  {
+    "id": "evidence-collection-and-packaging",
+    "title": "Evidence Collection and Packaging for Underwriters",
+    "category": "underwriting-controls",
+    "roles": ["ciso"],
+    "dated": false,
+    "summary": "Attestation is no longer enough. A vendor-neutral walkthrough of what real evidence looks like for MFA, EDR, backups, and incident response.",
+    "url": "/guides/evidence-collection-and-packaging/",
+    "published": "2026-07-19"
+  },
+  {
+    "id": "renewal-leverage",
+    "title": "What Changes at Renewal, and How to Use Improved Controls as Leverage",
+    "category": "renewal-management",
+    "roles": ["ciso", "cfo-risk"],
+    "dated": false,
+    "summary": "Renewal is a negotiation, not a formality. How a track record, control improvements, and an already-built evidence package become real leverage.",
+    "url": "/guides/renewal-leverage/",
+    "published": "2026-07-19"
+  },
+  {
+    "id": "incident-response-panel",
+    "title": "The Incident Response Panel: Why Your Policy May Already Choose Your Vendors",
+    "category": "claims-incidents",
+    "roles": ["ciso", "general-counsel"],
+    "dated": false,
+    "summary": "Many cyber policies require pre-approved vendors for a claim to be covered. What that means, and how to get your own trusted vendors approved in advance.",
+    "url": "/guides/incident-response-panel/",
+    "published": "2026-07-19"
+  }
+]

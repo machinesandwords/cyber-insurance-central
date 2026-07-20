@@ -1,54 +1,75 @@
-// ═══════════════════════════════════════════════════════════
-// NEWSLETTER — cyberinsurancecentral.com
-// Posts {email, group_id} to this site's Cloudflare Worker.
-// WORKER_URL and GROUP_ID are placeholders until Phase 1 setup
-// (MailerLite group + Worker deploy) is complete — see MAINTENANCE.md.
-// ═══════════════════════════════════════════════════════════
-
-const WORKER_URL = "https://newsletter.cyberinsurancecentral.com"; // TODO: confirm after Worker deploy
-const GROUP_ID = "TODO_SET_AFTER_MAILERLITE_GROUP_CREATED";
+/**
+ * newsletter.js — cyberinsurancecentral.com
+ * Wires all .newsletter-form elements on the page to the Cloudflare Worker.
+ * Drop in site root. No dependencies.
+ */
 
 (function () {
-  const form = document.getElementById('nl-form');
-  if (!form) return;
+  const WORKER_URL = 'https://newsletter-cyberinsurancecentral.whereismy328.workers.dev/subscribe';
+  const GROUP_ID   = '193395108513580215';
 
-  const emailInput = document.getElementById('nl-email');
-  const submitBtn = document.getElementById('nl-submit');
-  const msg = document.getElementById('nl-msg');
+  function wire(form) {
+    const input  = form.querySelector('input[type="email"]');
+    const button = form.querySelector('button');
+    if (!input || !button) return;
 
-  form.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    const email = emailInput.value.trim();
-    if (!email) return;
+    if (form.dataset.wired) return;
+    form.dataset.wired = 'true';
 
-    submitBtn.disabled = true;
-    msg.style.display = 'none';
-    msg.classList.remove('error');
+    button.addEventListener('click', function () {
+      const email = input.value.trim();
 
-    try {
-      const res = await fetch(WORKER_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, group_id: GROUP_ID })
-      });
-      const data = await res.json();
-
-      // NOTE: success check varies by site — verify against actual
-      // deployed Worker response shape before launch (data.success vs
-      // data.message === 'Subscribed').
-      if (data.success || data.message === 'Subscribed') {
-        submitBtn.textContent = 'Subscribed';
-        submitBtn.classList.add('subscribed');
-        msg.textContent = "You're on the list.";
-        msg.style.display = 'block';
-      } else {
-        throw new Error(data.message || 'Subscription failed');
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setStatus(form, 'error', 'Please enter a valid email address.');
+        return;
       }
-    } catch (err) {
-      submitBtn.disabled = false;
-      msg.textContent = 'Something went wrong. Try again.';
-      msg.classList.add('error');
-      msg.style.display = 'block';
+
+      setStatus(form, 'loading', '');
+      button.disabled = true;
+
+      fetch(WORKER_URL, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email: email, group_id: GROUP_ID }),
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.message === 'Subscribed') {
+            setStatus(form, 'success', "You're in. Check your inbox.");
+            input.value = '';
+          } else {
+            setStatus(form, 'error', 'Something went wrong. Please try again.');
+            button.disabled = false;
+          }
+        })
+        .catch(function () {
+          setStatus(form, 'error', 'Something went wrong. Please try again.');
+          button.disabled = false;
+        });
+    });
+  }
+
+  function setStatus(form, state, message) {
+    let status = form.querySelector('.newsletter-status');
+    if (!status) {
+      status = document.createElement('p');
+      status.className = 'newsletter-status';
+      status.style.cssText = 'font-size:11px; margin-top:8px; margin-bottom:0;';
+      form.parentNode.insertBefore(status, form.nextSibling);
     }
-  });
+    status.style.color = state === 'success' ? 'var(--accent)'
+                       : state === 'error'   ? '#991b1b'
+                       : 'var(--faint)';
+    status.textContent = state === 'loading' ? 'Subscribing...' : message;
+  }
+
+  function init() {
+    document.querySelectorAll('.newsletter-form').forEach(wire);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();

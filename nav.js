@@ -21,7 +21,8 @@
       <div class="nav-section-label">Tools</div>
       <a href="/tools/" class="nav-item depth-0">All tools</a>
       <a href="/tools/evidence-package-builder/" class="nav-item depth-1">├ Evidence Package Builder</a>
-      <a href="/tools/sublimit-visualizer/" class="nav-item depth-1">└ Coverage Gap Visualizer</a>
+      <a href="/tools/sublimit-visualizer/" class="nav-item depth-1">├ Coverage Gap Visualizer</a>
+      <a href="/tools/insurability-impact-checker/" class="nav-item depth-1">└ Insurability Impact Checker</a>
     </div>
 
     <div class="nav-divider"></div>

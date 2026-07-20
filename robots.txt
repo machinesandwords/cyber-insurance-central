@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://industrialiotsoftware.com/sitemap.xml
+
+Sitemap: https://cyberinsurancecentral.com/sitemap.xml
