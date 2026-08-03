@@ -4,7 +4,7 @@
   <!-- ROOT -->
   <url>
     <loc>https://cyberinsurancecentral.com/</loc>
-    <lastmod>2026-07-19</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -50,7 +50,7 @@
   <!-- GUIDES -->
   <url>
     <loc>https://cyberinsurancecentral.com/guides/</loc>
-    <lastmod>2026-07-19</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -73,14 +73,28 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cyberinsurancecentral.com/guides/renewal-leverage/</loc>
+    <loc>https://cyberinsurancecentral.com/guides/incident-response-panel/</loc>
     <lastmod>2026-07-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <!-- GUIDES: RENEWAL & ONGOING MANAGEMENT (category) -->
   <url>
-    <loc>https://cyberinsurancecentral.com/guides/incident-response-panel/</loc>
-    <lastmod>2026-07-19</lastmod>
+    <loc>https://cyberinsurancecentral.com/guides/renewal-and-ongoing-management/</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cyberinsurancecentral.com/guides/renewal-and-ongoing-management/renewal-leverage/</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cyberinsurancecentral.com/guides/renewal-and-ongoing-management/answering-renewal-questions/</loc>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
